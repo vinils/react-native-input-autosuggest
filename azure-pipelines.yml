@@ -35,8 +35,8 @@ stages:
     #     path: '$(Pipeline.Workspace)/.yarn/cache' # Recommended path for Yarn Berry cache
 
     - script: |
-        # yarn install --immutable
-        yarn install --frozen-lockfile
+        yarn install --immutable
+        # yarn install --frozen-lockfile
       displayName: 'Install Yarn Dependencies'
 
     - script: |
