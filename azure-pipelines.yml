@@ -35,7 +35,11 @@ stages:
     #     path: '$(Pipeline.Workspace)/.yarn/cache' # Recommended path for Yarn Berry cache
 
     - script: |
-        yarn -v
+         corepack enable
+      displayName: 'Install Yarn Dependencies'
+
+    - script: |
+         yarn set version 4.11.0
       displayName: 'Install Yarn Dependencies'
 
     - script: |
