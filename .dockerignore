@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+.yarn/*
+!.yarn/cache
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+!*.yarn/plugins
+.pnp.*
+
+# Environment files
+.env
+.env.*
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# IDE and OS files
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Build artifacts and temporary files
+build
+dist
+temp
+coverage
+
+# Docker and Git related
+Dockerfile*
+.dockerignore
+.git
+.gitignore
+
+# React Native specific
+android/build
+ios/build
+ios/Pods # Generally handled by specific platform builds
+*.xcworkspace
+*.xcscheme
+
+*.apk
+*.ipa
+
+# Development/version control files
+.git
+.gitignore
+.gitattributes
+.env
+.vscode
+npm-debug.log
+yarn-error.log
+.editorconfig
+.github/
+
+# React Native specific
+# These are generated locally and generally shouldn't be in the image context
+android/.gradle
+ios/.xcodeproj
+ios/.xcworkspace
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+
+# documentation and miscellaneous
+docs/
+*.md
