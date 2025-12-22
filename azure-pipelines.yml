@@ -99,12 +99,12 @@ steps:
     workingFile: .npmrc
     customEndpoint: 'npmjs'
 
-- task: npmAuthenticate@0
-  inputs:
-    # Link to the variable group where NPM_TOKEN is stored
-    customEndpoint: '$(NPM_TOKEN)' 
-    workingFile: .npmrc
-  displayName: 'npm Authenticate'  
+# - task: npmAuthenticate@0
+#   inputs:
+#     # Link to the variable group where NPM_TOKEN is stored
+#     customEndpoint: '$(NPM_TOKEN)' 
+#     workingFile: .npmrc
+#   displayName: 'npm Authenticate'  
 
 - task: Npm@1
   continueOnError: true
