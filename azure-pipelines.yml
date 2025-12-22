@@ -126,5 +126,6 @@ steps:
     verbose: true
     publishRegistry: 'useFeed'
     publishFeed: 'f4656303-20cc-46a7-b418-eb744ef7b0e3'
+    customCommand: 'publish --tag beta'
   displayName: 'publish azure'
 
