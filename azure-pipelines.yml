@@ -18,22 +18,22 @@ strategy:
       imageName: "ubuntu-latest"
       PLATFORM: 'linux/amd64'
       FINALIMAGE: node:24-alpine
-    linuxArm64:
-      imageName: "ubuntu-latest"
-      PLATFORM: 'linux/arm64'
-      FINALIMAGE: node:24-alpine
-    windows:
-      imageName: "windows-latest"
-      PLATFORM: 'windows/amd64'
-      FINALIMAGE: node:24-alpine
-    macosAmd64:
-      imageName: "macos-latest"
-      PLATFORM: 'linux/amd64'
-      FINALIMAGE: node:24-alpine
-    macosArm64:
-      imageName: "macos-latest"
-      PLATFORM: 'linux/arm64'
-      FINALIMAGE: node:24-alpine
+    # linuxArm64:
+    #   imageName: "ubuntu-latest"
+    #   PLATFORM: 'linux/arm64'
+    #   FINALIMAGE: node:24-alpine
+    # windows:
+    #   imageName: "windows-latest"
+    #   PLATFORM: 'windows/amd64'
+    #   FINALIMAGE: node:24-alpine
+    # macosAmd64:
+    #   imageName: "macos-latest"
+    #   PLATFORM: 'linux/amd64'
+    #   FINALIMAGE: node:24-alpine
+    # macosArm64:
+    #   imageName: "macos-latest"
+    #   PLATFORM: 'linux/arm64'
+    #   FINALIMAGE: node:24-alpine
 
 pool:
   vmImage: $(imageName)
@@ -98,6 +98,13 @@ steps:
   inputs:
     workingFile: .npmrc
     customEndpoint: 'npmjs'
+
+- task: npmAuthenticate@0
+  inputs:
+    # Link to the variable group where NPM_TOKEN is stored
+    customEndpoint: '$(NPM_TOKEN)' 
+    workingFile: .npmrc
+  displayName: 'npm Authenticate'  
 
 - task: Npm@1
   continueOnError: true
