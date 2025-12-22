@@ -39,8 +39,11 @@ pool:
   vmImage: $(imageName)
 
 variables:
-  BUILDIMGTAG: '24-alpine'
-  YARN_CACHE_FOLDER: "$(Pipeline.Workspace)/.yarn"
+  - group: NPMJS
+  - name: BUILDIMGTAG 
+    value: '24-alpine'
+  - name: YARN_CACHE_FOLDER 
+    value: "$(Pipeline.Workspace)/.yarn"
 
 steps:
 
@@ -95,6 +98,13 @@ steps:
   inputs:
     workingFile: .npmrc
     customEndpoint: 'npmjs'
+
+- task: npmAuthenticate@0
+  inputs:
+    # Link to the variable group where NPM_TOKEN is stored
+    customEndpoint: '$(NPM_TOKEN)' 
+    workingFile: .npmrc
+  displayName: 'npm Authenticate'  
 
 - task: Npm@1
   continueOnError: true
