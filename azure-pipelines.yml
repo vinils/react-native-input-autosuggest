@@ -100,17 +100,22 @@ steps:
   continueOnError: true
   inputs:
     command: 'publish'
-    publishRegistry: 'useFeed'
-    publishFeed: '3f6b99e3-ca49-4af4-8335-9d2f9cb75f15/fe8a17d2-64b4-41fd-bf5b-d0dd1541c811'
-  displayName: 'publish azure artifactrs'
+    verbose: true
+    publishEndpoint: 'npmjs'
+  displayName: 'publish npm'
+
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: azure.npmrc
+    customEndpoint: 'npmjs'
 
 - task: Npm@1
   continueOnError: true
   inputs:
     command: 'publish'
-    verbose: true
-    publishEndpoint: 'npmjs'
-  displayName: 'publish npm'
+    publishRegistry: 'useFeed'
+    publishFeed: '3f6b99e3-ca49-4af4-8335-9d2f9cb75f15/fe8a17d2-64b4-41fd-bf5b-d0dd1541c811'
+  displayName: 'publish azure artifactrs'
 
 
 - task: Npm@1
