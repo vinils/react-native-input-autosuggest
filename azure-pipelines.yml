@@ -115,6 +115,7 @@ steps:
     command: 'publish'
     publishRegistry: 'useFeed'
     publishFeed: '3f6b99e3-ca49-4af4-8335-9d2f9cb75f15/fe8a17d2-64b4-41fd-bf5b-d0dd1541c811'
+    customCommand: 'publish --tag beta'
   displayName: 'publish azure artifactrs'
 
 
