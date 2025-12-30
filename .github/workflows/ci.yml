@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  job1:
+  ${{ matrix.os }}:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
