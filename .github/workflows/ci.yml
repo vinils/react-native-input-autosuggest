@@ -72,30 +72,3 @@ jobs:
             * Use this space to detail the changes, or use another action to generate them automatically.
           draft: false
           prerelease: false
-
-      - name: Archive build artifacts
-        run: tar -czvf build-artifacts.tar.gz build
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build-artifacts.tar.gz
-          asset_name: build-artifacts-${{ github.ref_name }}.tar.gz
-          asset_content_type: application/gzip
-
-      - name: Archive build artifacts
-        run: tar -czvf build-artifacts.tar.gz build
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build-artifacts.tar.gz
-          asset_name: build-artifacts-${{ github.ref_name }}.tar.gz
-          asset_content_type: application/gzip
-          
