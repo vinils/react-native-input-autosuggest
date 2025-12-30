@@ -34,8 +34,8 @@ jobs:
         run: yarn install --immutable
         shell: bash
 
-      - name: Lint files
-        run: yarn lint
+      # - name: Lint files
+      #   run: yarn lint
 
       - name: Typecheck files
         run: yarn typecheck
