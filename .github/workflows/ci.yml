@@ -29,6 +29,7 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
+          cache: 'yarn'
 
       - name: Enable Corepack (optional, for explicit activation)
         run: corepack enable
@@ -53,3 +54,61 @@ jobs:
       #   run: |
       #     yarn example expo export --platform web
 
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            # Changes in this Release
+            Automatically generated release notes (optional - can use action for this too)
+            
+            * Use this space to detail the changes, or use another action to generate them automatically.
+          draft: false
+          prerelease: false
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            # Changes in this Release
+            Automatically generated release notes (optional - can use action for this too)
+            
+            * Use this space to detail the changes, or use another action to generate them automatically.
+          draft: false
+          prerelease: false
+
+      - name: Archive build artifacts
+        run: tar -czvf build-artifacts.tar.gz build
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build-artifacts.tar.gz
+          asset_name: build-artifacts-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Archive build artifacts
+        run: tar -czvf build-artifacts.tar.gz build
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build-artifacts.tar.gz
+          asset_name: build-artifacts-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/gzip
+          
