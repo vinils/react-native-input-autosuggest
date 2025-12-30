@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    web:
+        container_name: selfapi
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: prod
+        ports:
+            - ${PORT}:${PORT}
+        environment:
+            MONGODB_URL: ${MONGODB_URL}
+            NODE_ENV: production
+            AUTH_TOKEN: ${AUTH_TOKEN}
+        command: yarn start

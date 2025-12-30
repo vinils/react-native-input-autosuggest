@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+    web-dev:
+        container_name: selfapi
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: base
+        ports:
+            - ${PORT}:${PORT}
+        environment:
+            MONGODB_URL: ${MONGODB_URL}
+            NODE_ENV: development
+            AUTH_TOKEN: ${AUTH_TOKEN}
+        volumes:
+            - node_modules:/home/node/app/node_modules
+            - ./src/:/home/node/app/src
+            - ./tests/:/home/node/app/tests
+        command: yarn dev2
+volumes:
+    node_modules:
