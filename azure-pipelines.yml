@@ -1,0 +1,141 @@
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    exclude:
+    - '**/*.md'
+    - devcontainer
+    - env.example
+    - azurepipelines-coverage.yml
+    - Dockerfile.dev
+
+name: $(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
+
+strategy:
+  matrix:
+    linuxAmd64:
+      imageName: "ubuntu-latest"
+      PLATFORM: 'linux/amd64'
+      FINALIMAGE: node:24-alpine
+    # linuxArm64:
+    #   imageName: "ubuntu-latest"
+    #   PLATFORM: 'linux/arm64'
+    #   FINALIMAGE: node:24-alpine
+    # windows:
+    #   imageName: "windows-latest"
+    #   PLATFORM: 'windows/amd64'
+    #   FINALIMAGE: node:24-alpine
+    # macosAmd64:
+    #   imageName: "macos-latest"
+    #   PLATFORM: 'linux/amd64'
+    #   FINALIMAGE: node:24-alpine
+    # macosArm64:
+    #   imageName: "macos-latest"
+    #   PLATFORM: 'linux/arm64'
+    #   FINALIMAGE: node:24-alpine
+
+pool:
+  vmImage: $(imageName)
+
+variables:
+  - group: NPMJS
+  - name: BUILDIMGTAG 
+    value: '24-alpine'
+  - name: YARN_CACHE_FOLDER 
+    value: "$(Pipeline.Workspace)/.yarn"
+
+steps:
+
+- task: NodeTool@0
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '24.x'
+    checkLatest: true
+
+- script: |
+    corepack enable
+  displayName: 'Enable corepack'
+
+- script: |
+    yarn set version 4.11.0
+  displayName: 'Yarn set version'
+
+- task: Cache@2
+  inputs:
+    key: 'yarn | "$(Agent.OS)" | yarn.lock'
+    restoreKeys: | 
+      yarn | "$(Agent.OS)"
+      yarn
+    path: .yarn
+  displayName: Cache Yarn packages
+
+- script: |
+    yarn install --immutable
+  displayName: 'Install dependencies'
+
+- script: |
+    yarn typecheck
+  displayName: 'Typecheck'
+
+# - script: |
+#     yarn lint
+#   displayName: 'Lint'
+
+- script: |
+    yarn tsc
+  displayName: 'Typescript build'
+
+- script: |
+    yarn test --ci --coverage
+  displayName: 'Test'
+
+- script: |
+    yarn prepare
+  displayName: 'prepare'
+
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: .npmrc
+    customEndpoint: 'npmjs'
+
+# - task: npmAuthenticate@0
+#   inputs:
+#     # Link to the variable group where NPM_TOKEN is stored
+#     customEndpoint: '$(NPM_TOKEN)' 
+#     workingFile: .npmrc
+#   displayName: 'npm Authenticate'  
+
+- task: Npm@1
+  continueOnError: true
+  inputs:
+    command: 'publish'
+    verbose: true
+    publishEndpoint: 'npmjs'
+  displayName: 'publish npm'
+
+- task: npmAuthenticate@0
+  inputs:
+    workingFile: azure.npmrc
+    customEndpoint: 'npmjs'
+
+- task: Npm@1
+  continueOnError: true
+  inputs:
+    command: 'publish'
+    publishRegistry: 'useFeed'
+    publishFeed: '3f6b99e3-ca49-4af4-8335-9d2f9cb75f15/fe8a17d2-64b4-41fd-bf5b-d0dd1541c811'
+    customCommand: 'publish --tag beta'
+  displayName: 'publish azure artifactrs'
+
+
+- task: Npm@1
+  continueOnError: true
+  inputs:
+    command: 'publish'
+    verbose: true
+    publishRegistry: 'useFeed'
+    publishFeed: 'f4656303-20cc-46a7-b418-eb744ef7b0e3'
+    customCommand: 'publish --tag beta'
+  displayName: 'publish azure'
+
