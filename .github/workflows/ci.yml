@@ -76,7 +76,6 @@ jobs:
 #          body: |
 #            # Changes in this Release
 #            Automatically generated release notes (optional - can use action for this too)
-            
             * Use this space to detail the changes, or use another action to generate them automatically.
           draft: false
           prerelease: false
