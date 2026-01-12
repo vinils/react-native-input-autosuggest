@@ -63,7 +63,7 @@ jobs:
       #     yarn example expo export --platform web
 
       - name: Publish to npm
-        run: yarn npm publish --access public
+        run: yarn npm publish --access public --provenance
         
 #      - name: Create GitHub Release
 #        id: create_release
