@@ -63,7 +63,7 @@ jobs:
       #     yarn example expo export --platform web
 
       - name: Publish to npm
-        run: yarn npm publish --access public --provenance
+        run: yarn npm publish --access public
         env:
           # Use YARN_ prefix specifically for Yarn Berry
           YARN_NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
