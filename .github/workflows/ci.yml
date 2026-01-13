@@ -66,7 +66,7 @@ jobs:
         run: yarn npm publish --access public
         env:
           # Use YARN_ prefix specifically for Yarn Berry
-          YARN_NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN  }}
           
 #      - name: Create GitHub Release
 #        id: create_release
