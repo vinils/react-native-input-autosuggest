@@ -27,6 +27,10 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
+permissions:
+  contents: read
+  packages: write
+  id-token: write
 
 jobs:
   OS:
@@ -36,10 +40,6 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
     steps:
       - name: List all environment variables
         run: env
