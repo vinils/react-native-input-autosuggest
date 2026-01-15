@@ -52,8 +52,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'yarn'
-          registry-url: 'https://npm.pkg.github.com'
-          #registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://registry.npmjs.org'
+#          registry-url: 'https://npm.pkg.github.com'
 
       - name: Enable Corepack
         run: | 
@@ -82,6 +82,8 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #      - name: Publish to npm
 #        run: yarn npm publish --access public
