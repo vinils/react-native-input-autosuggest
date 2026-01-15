@@ -52,7 +52,8 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'yarn'
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://npm.pkg.github.com'
+          #registry-url: 'https://registry.npmjs.org'
 
       - name: Enable Corepack
         run: | 
