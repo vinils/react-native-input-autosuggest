@@ -134,7 +134,7 @@ jobs:
         if: failure()
         with:
           name: my-application-logs
-          path: ${{ github.workspace }}/.npm/_logs/*.log
+          path: ./.npm/_logs/*.log
           retention-days: 30
 
 #workign on dafeb7df620c6dbcc0e08be333d803d6f01231d8 with name @vinils/
