@@ -1,5 +1,5 @@
 {
-  "name": "@vinils/react-native-input-autosuggest",
+  "name": "react-native-input-autosuggest",
   "version": "0.1.4",
   "description": "input autosuggest react native",
   "main": "./lib/module/index.js",
