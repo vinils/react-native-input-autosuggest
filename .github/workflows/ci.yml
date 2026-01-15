@@ -128,7 +128,14 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
+    
+      - name: Upload log file artifact
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: my-application-logs
+          path: /home/runner/.npm/_logs/*.log
+          retention-days: 30
 
 #workign on dafeb7df620c6dbcc0e08be333d803d6f01231d8 with name @vinils/
 #  publish-gpr:
