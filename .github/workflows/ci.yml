@@ -52,8 +52,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'yarn'
-          registry-url: 'https://registry.npmjs.org'
-#          registry-url: 'https://npm.pkg.github.com'
 
       - name: Enable Corepack
         run: | 
@@ -102,8 +100,6 @@ jobs:
 #          draft: false
 #          prerelease: false
 
-
-
   publish-gpr:
     needs: OS
     runs-on: ubuntu-latest
@@ -116,7 +112,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'yarn'
-          registry-url: https://npm.pkg.github.com/
+          registry-url: https://registry.npmjs.org
 
       - name: Enable Corepack
         run: | 
@@ -132,3 +128,34 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+
+#workign on dafeb7df620c6dbcc0e08be333d803d6f01231d8 with name @vinils/
+#  publish-gpr:
+#    needs: OS
+#    runs-on: ubuntu-latest
+#    permissions:
+#      packages: write
+#      contents: read
+#    steps:
+#      - uses: actions/checkout@v5
+#      - uses: actions/setup-node@v4
+#        with:
+#          node-version-file: .nvmrc
+#          cache: 'yarn'
+#          registry-url: https://npm.pkg.github.com/
+#
+#      - name: Enable Corepack
+#        run: | 
+#          corepack enable
+#          yarn set version 4.11.0
+#        
+#      - name: Install dependencies
+#        run: yarn install --immutable
+#
+#      - name: Install dependencies
+#        run: yarn prepare
+#
+#      - run: npm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
