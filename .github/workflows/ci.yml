@@ -80,11 +80,6 @@ jobs:
       #   run: |
       #     yarn example expo export --platform web
 
-      - name: Publish to npm
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 #      - name: Publish to npm
 #        run: yarn npm publish --access public
 
@@ -107,3 +102,22 @@ jobs:
 #            * Use this space to detail the changes, or use another action to generate them automatically.
 #          draft: false
 #          prerelease: false
+
+
+
+  publish-gpr:
+    needs: OS
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
