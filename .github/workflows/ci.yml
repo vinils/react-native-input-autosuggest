@@ -127,7 +127,7 @@ jobs:
       - name: Install dependencies
         run: yarn prepare
 
-      - run: npm publish --access public
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     
