@@ -1,6 +1,6 @@
 {
   "name": "react-native-input-autosuggest",
-  "version": "0.1.9-rc.1",
+  "version": "0.1.9-rc.2",
   "description": "input autosuggest react native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
