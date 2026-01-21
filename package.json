@@ -53,9 +53,6 @@
     "url": "https://github.com/vinils/react-native-input-autosuggest/issues"
   },
   "homepage": "https://github.com/vinils/react-native-input-autosuggest#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
   "devDependencies": {
     "@eslint/compat": "^1.3.2",
     "@eslint/eslintrc": "^3.3.1",
