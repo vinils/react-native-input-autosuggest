@@ -17,9 +17,19 @@ on:
   push:
     branches:
       - '*'
+    paths-ignore:
+      - 'docs/**'
+      - '.gitignore'
+      - '*.md'
+      - 'LICENSE'
   pull_request:
     branches:
       - '*'
+    paths-ignore:
+      - 'docs/**'
+      - '.gitignore'
+      - '*.md'
+      - 'LICENSE'
   merge_group:
     types:
       - checks_requested
