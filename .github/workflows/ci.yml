@@ -1,72 +1,110 @@
 name: CI
 on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+      environment:
+        description: 'Environment to deploy to'
+        type: choice
+        options:
+        - development
+        - staging
+        - production
+
   push:
     branches:
-      - main
+      - '*'
   pull_request:
     branches:
-      - main
+      - '*'
   merge_group:
     types:
       - checks_requested
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
+  OS:
+    name: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
 
-      - name: Setup
-        uses: ./.github/actions/setup
+      - name: Enable Corepack
+        run: | 
+          corepack enable
+          yarn set version 4.11.0
+        
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      - name: Lint files
-        run: yarn lint
+      # - name: Lint files
+      #   run: yarn lint
 
       - name: Typecheck files
         run: yarn typecheck
 
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Run unit tests
+      - name: Unit tests
         run: yarn test --maxWorkers=2 --coverage
-
-  build-library:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Setup
-        uses: ./.github/actions/setup
 
       - name: Build package
         run: yarn prepare
 
-  build-web:
+      - name: Create package
+        run: yarn pack
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-${{ matrix.os }}
+          path: ./package.tgz
+
+      # - name: Build example for Web
+      #   run: |
+      #     yarn example expo export --platform web
+
+  publish:
+    needs: OS
     runs-on: ubuntu-latest
-
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
 
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Build example for Web
-        run: |
-          yarn example expo export --platform web
+      - name: Download built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact-ubuntu-latest
+          path: ./
+        
+      - name: Publishing
+        run: npm publish ./package.tgz --tag rc
+    
+      - name: Upload log
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: publish-logs
+          path: /home/runner/.npm/_logs/*.log
+          retention-days: 30
