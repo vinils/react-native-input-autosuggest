@@ -5,6 +5,9 @@
 # XDE
 .expo/
 
+# coverage
+coverage/
+
 # VSCode
 .vscode/
 jsconfig.json
