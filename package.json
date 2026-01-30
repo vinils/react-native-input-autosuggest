@@ -108,7 +108,16 @@
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
-    ]
+    ],
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 15,
+        "statements": 15
+      }
+    }
   },
   "create-react-native-library": {
     "type": "library",
