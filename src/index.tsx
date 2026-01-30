@@ -1,43 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { View, TextInput, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { filterSuggestions, type Suggestion, DEFAULT_SUGGESTIONS } from './suggestions';
 
-interface Suggestion {
-  id: string;
-  name: string;
-}
+export const handleSelectAction = (item: Suggestion, setInputText: (text: string) => void): void => {
+  setInputText(item.name);
+};
 
-const suggestions: Suggestion[] = [
-  { id: '1', name: 'Suggestion 1' },
-  { id: '2', name: 'Suggestion 2' },
-  { id: '3', name: 'Suggestion 3' },
-  { id: '4', name: 'Suggestion 4' },
-  { id: '5', name: 'Suggestion 5' },
-];
+export const getSuggestionDisplayText = (item: Suggestion): string => {
+  return item.name;
+};
 
-  export const InputAutoSugest: React.FC = () => {
+export const InputAutoSugest: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
   const [filteredSuggestions, setFilteredSuggestions] = useState<Suggestion[]>([]);
 
   const handleSelect = (item: Suggestion) => {
-    setInputText(item.name);
+    handleSelectAction(item, setInputText);
   };
 
   const renderItem = ({ item }: { item: Suggestion }) => (
     <TouchableOpacity style={styles.suggestionItem} onPress={() => handleSelect(item)}>
-      <Text>{item.name}</Text>
+      <Text>{getSuggestionDisplayText(item)}</Text>
     </TouchableOpacity>
   );
 
   useEffect(() => {
-    var filtered: Suggestion[] = [];
-
-    if (inputText.length > 0) {
-      filtered = suggestions.filter(item =>
-        item.name.toLowerCase().includes(inputText.toLowerCase())
-      );
-    }
+    const filtered = filterSuggestions(inputText, DEFAULT_SUGGESTIONS);
     setFilteredSuggestions(filtered);
-  }, [inputText, suggestions]);
+  }, [inputText]);
 
   return (
     <View style={styles.container}>
