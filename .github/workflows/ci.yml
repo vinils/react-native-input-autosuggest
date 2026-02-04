@@ -92,7 +92,7 @@ jobs:
   publish:
     needs: OS
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/heads/releases/') }}
+    environment: deploy
     permissions:
       id-token: write
       contents: read
