@@ -39,56 +39,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  versioning:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # Required to push tags
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          # Fetch all history and tags for accurate versioning
-          fetch-depth: 0 
-
-      - name: Get current date in YYYYMMDD format
-        run: |
-          BUILD_DATE=$(date +'%Y%m%d')
-          VERSION_OLD=$(node -p "require('./package.json').version")
-          # e.g. version:  0.1.9-rc.13-20250205.1
-          # VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}
-          echo "VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}" >> $GITHUB_ENV
-
-      # - name: Set tag version
-      #   run: |
-      #     git tag $VERSION
-      #     git push origin $VERSION
-
-      - name: Configure Git User
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
-      - name: Set version with date
-        run: |
-          npm version $VERSION
-        env:
-          # Use GITHUB_TOKEN for pushing changes back to the repo
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Commit and Push
-        run: |
-          # git push origin HEAD:${{ github.ref }} --tags
-          # git push origin HEAD:${{ github.ref }} HEAD
-          git push origin HEAD:${{ github.ref }} --follow-tags
-
   OS:
-    needs: versioning 
     name: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # Required to push tags
     steps:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -103,7 +62,19 @@ jobs:
         run: | 
           corepack enable
           yarn set version 4.11.0
-        
+
+      - name: Get new version
+        run: |
+          BUILD_DATE=$(date +'%Y%m%d')
+          VERSION_OLD=$(node -p "require('./package.json').version")
+          # e.g. version:  0.1.9-rc.13-20250205.1
+          # VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}
+          echo "VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Set version with date
+        run: |
+          npm version $VERSION
+
       - name: Install dependencies
         run: yarn install --immutable
 
@@ -131,6 +102,11 @@ jobs:
       # - name: Build example for Web
       #   run: |
       #     yarn example expo export --platform web
+
+      - name: push tag version
+        run: |
+          # git tag $VERSION
+          git push origin $VERSION
 
   publish:
     needs: OS
@@ -161,5 +137,3 @@ jobs:
           name: publish-logs
           path: /home/runner/.npm/_logs/*.log
           retention-days: 30
-
-
