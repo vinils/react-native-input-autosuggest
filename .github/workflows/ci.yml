@@ -52,7 +52,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
+      # - name: Generate YYYYMMDD.count
+      #   shell: pwsh
+      #   run: |
+      #     $date = Get-Date -Format "yyyyMMdd"
+      #     $count = 1 # Update or calculate count as needed
+      #     $version = "${date}.${count}"
+      #     echo "Generated Version: $version"
+      #     echo "VERSION=$version" >> $env:GITHUB_ENV
+
       - name: Get new version
+        shell: bash
         run: |
           BUILD_DATE=$(date +'%Y%m%d')
           VERSION_OLD=$(node -p "require('./package.json').version")
