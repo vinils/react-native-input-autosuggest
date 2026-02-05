@@ -61,10 +61,9 @@ jobs:
       - name: Get new version
         shell: bash
         run: |
-          BUILD_DATE=$(date +'%Y%m%d')
           VERSION_OLD=$(node -p "require('./package.json').version")
-          # e.g. version:  0.1.9-rc.13-20250205.1
-          echo "VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}" >> $GITHUB_ENV
+          # e.g. version:  0.1.9-rc.13-1
+          echo "VERSION=${VERSION_OLD}-${{ github.run_number }}" >> $GITHUB_ENV
 
       - name: Set version with date
         shell: bash
