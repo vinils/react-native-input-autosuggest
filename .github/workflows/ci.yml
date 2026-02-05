@@ -107,6 +107,8 @@ jobs:
         run: |
           git tag $VERSION
           git push origin $VERSION
+        continue-on-error: true
+
 
   publish:
     needs: OS
