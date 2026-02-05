@@ -39,7 +39,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push tags
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get current date in YYYYMMDD format
+        run: |
+          BUILD_DATE=$(date +'%Y%m%d')
+          VERSION_OLD=$(node -p "require('./package.json').version")
+          # e.g. version:  0.1.9-rc.13-20250205.1
+          # VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}
+          echo "VERSION=${VERSION_OLD}-${BUILD_DATE}.${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Set tag version
+        run: |
+          git tag $VERSION
+          git push origin $VERSION
+
+      - name: Set version with date
+        run: |
+          npm version $VERSION
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -am "chore: update version to $VERSION"
+          git push
+
   OS:
+    needs: versioning 
     name: ${{ matrix.os }}
     strategy:
       matrix:
@@ -118,3 +151,9 @@ jobs:
           name: publish-logs
           path: /home/runner/.npm/_logs/*.log
           retention-days: 30
+
+
+
+
+
+##### github create relese automatically
