@@ -77,8 +77,8 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git push origin main --tags
-          git push origin main HEAD
+          git push origin HEAD:${{ github.ref }} --tags
+          git push origin HEAD:${{ github.ref }} HEAD
 
   OS:
     needs: versioning 
