@@ -118,3 +118,16 @@ jobs:
           name: publish-logs
           path: /home/runner/.npm/_logs/*.log
           retention-days: 30
+
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push tags
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create new tag
+        run: |
+          TAG_NAME="0.1.9-rc.13"
+          git tag $TAG_NAME
+          git push origin $TAG_NAME
