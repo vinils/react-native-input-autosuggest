@@ -85,6 +85,9 @@ jobs:
         run: yarn typecheck
 
       - name: Unit tests
+        run: yarn test --reporters=jest-junit
+
+      - name: Unit tests
         run: yarn test --maxWorkers=2 --coverage
 
       - name: Upload coverage reports to Codecov
