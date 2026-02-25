@@ -85,7 +85,7 @@ jobs:
         run: yarn typecheck
 
       - name: Unit tests
-        run: yarn test --reporters=jest-junit
+        run: yarn test --reporters=default --reporters=jest-junit
 
       - name: Coverage
         run: yarn test --maxWorkers=2 --coverage
