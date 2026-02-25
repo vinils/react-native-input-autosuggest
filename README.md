@@ -1,4 +1,25 @@
+[npm-image]: https://img.shields.io/npm/v/react-native-input-autosuggest.svg
+[npm-url]: https://npmjs.com/package/react-native-input-autosuggest
+[node-version-image]: https://img.shields.io/node/v/react-native-input-autosuggest.svg
+[node-version-url]: https://nodejs.org/en/download
+[downloads-image]: https://img.shields.io/npm/dm/react-native-input-autosuggest.svg
+[downloads-url]: https://npmjs.com/package/react-native-input-autosuggest
+[license-url]: https://github.com/vinils/react-native-input-autosuggest/blob/main/LICENSE
+[license-image]: https://img.shields.io/npm/l/react-native-input-autosuggest.svg?maxAge=2592000
+[coverage]: https://img.shields.io/codecov/c/github/vinils/react-native-input-autosuggest
+[coverage-url]: https://app.codecov.io/github/vinils/react-native-input-autosuggest
+[ci-url]: https://github.com/vinils/react-native-input-autosuggest/actions/workflows/ci.yml
+[ci-image]: https://github.com/vinils/react-native-input-autosuggest/actions/workflows/ci.yml/badge.svg
+
 # react-native-input-autosuggest
+
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Node.js Version][node-version-image]][node-version-url]
+[![GitHub Workflow Status (with event)][ci-image]][ci-url]
+[![Codecov][coverage]][coverage-url]
+[![License][license-image]][license-url]
+
 
 input autosuggest react native
 
