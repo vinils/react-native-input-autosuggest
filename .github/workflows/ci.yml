@@ -96,15 +96,15 @@ jobs:
       - name: Create package
         run: yarn pack
 
+      # - name: Build example for Web
+      #   run: |
+      #     yarn example expo export --platform web
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact-${{ matrix.os }}
           path: ./package.tgz
-
-      # - name: Build example for Web
-      #   run: |
-      #     yarn example expo export --platform web
 
       - name: push tag version
         run: |
