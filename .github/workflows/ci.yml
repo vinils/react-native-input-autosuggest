@@ -90,12 +90,6 @@ jobs:
       - name: Coverage
         run: yarn test --maxWorkers=2 --coverage
 
-      - name: Upload test results
-        uses: codecov/test-results-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-        continue-on-error: true
-
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5
         with:
@@ -124,6 +118,11 @@ jobs:
           git push origin $VERSION
         continue-on-error: true
 
+      - name: Upload test results
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true
 
   publish:
     needs: OS
