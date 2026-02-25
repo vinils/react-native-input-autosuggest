@@ -96,7 +96,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
         continue-on-error: true
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage reports
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
