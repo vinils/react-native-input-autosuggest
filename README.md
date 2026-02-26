@@ -1,7 +1,5 @@
 [npm-image]: https://img.shields.io/npm/v/react-native-input-autosuggest.svg
 [npm-url]: https://npmjs.com/package/react-native-input-autosuggest
-[node-version-image]: https://img.shields.io/node/v/react-native-input-autosuggest.svg
-[node-version-url]: https://nodejs.org/en/download
 [downloads-image]: https://img.shields.io/npm/dm/react-native-input-autosuggest.svg
 [downloads-url]: https://npmjs.com/package/react-native-input-autosuggest
 [license-url]: https://github.com/vinils/react-native-input-autosuggest/blob/main/LICENSE
@@ -13,9 +11,10 @@
 
 # react-native-input-autosuggest
 
+![npm version](https://img.shields.io)
+
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![Node.js Version][node-version-image]][node-version-url]
 [![GitHub Workflow Status (with event)][ci-image]][ci-url]
 [![Codecov][coverage]][coverage-url]
 [![License][license-image]][license-url]
