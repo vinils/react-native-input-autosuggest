@@ -142,7 +142,7 @@ jobs:
           name: build-artifact-ubuntu-latest
           path: ./
         
-      - name: Publishing
+      - name: Publishing NPM
         run: npm publish ./package.tgz --tag rc
     
       - name: Upload log
