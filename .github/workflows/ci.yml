@@ -146,7 +146,7 @@ jobs:
         run: npm publish ./package.tgz --tag rc
     
       - name: Publishing YARN
-        run: yarn npm publish ./package.tgz --tag rc
+        run: yarn npm publish package.tgz --access public --tag rc 
 
       - name: Upload log
         uses: actions/upload-artifact@v4
