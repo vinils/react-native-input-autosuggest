@@ -94,7 +94,7 @@ jobs:
         run: yarn prepare
 
       - name: Create package
-        run: yarn pack
+        run: yarn pack --filename=package.tgz
 
       # - name: Build example for Web
       #   run: |
@@ -152,7 +152,7 @@ jobs:
           extract_dir: .
 
       - name: Publishing YARN
-        run: yarn publish ./package/package
+        run: yarn publish ./package.tgz
 
       - name: Upload log
         uses: actions/upload-artifact@v4
