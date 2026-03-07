@@ -94,7 +94,7 @@ jobs:
         run: yarn prepare
 
       - name: Create package
-        run: yarn pack
+        run: yarn pack --out ./package.tgz
 
       # - name: Build example for Web
       #   run: |
@@ -144,7 +144,16 @@ jobs:
         
       - name: Publishing NPM
         run: npm publish ./package.tgz --tag rc
-    
+
+      - name: Extract tgz file
+        uses: ihiroky/extract-action@v1
+        with:
+          file_path: ./package.tgz
+          extract_dir: .
+
+      - name: Publishing YARN
+        run: yarn npm publish ./package.tgz --access public --tag rc
+
       - name: Upload log
         uses: actions/upload-artifact@v4
         if: failure()
