@@ -149,7 +149,7 @@ jobs:
         uses: ihiroky/extract-action@v1
         with:
           file_path: ./package.tgz
-          extract_dir: package
+          extract_dir: .
 
       - name: Publishing YARN
         run: yarn publish ./package/package
