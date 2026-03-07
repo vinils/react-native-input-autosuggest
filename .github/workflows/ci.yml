@@ -152,7 +152,7 @@ jobs:
           extract_dir: package
 
       - name: Publishing YARN
-        run: yarn publish ./package --access public --tag rc 
+        run: yarn publish ./package
 
       - name: Upload log
         uses: actions/upload-artifact@v4
