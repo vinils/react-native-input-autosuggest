@@ -144,7 +144,16 @@ jobs:
         
       - name: Publishing NPM
         run: npm publish ./package.tgz --tag rc
-    
+
+      - name: Extract tgz file
+        uses: ihiroky/extract-action@v1
+        with:
+          file_path: ./package.tgz
+          extract_dir: package
+
+      - name: Publishing YARN
+        run: yarn publish ./package --access public --tag rc 
+
       - name: Upload log
         uses: actions/upload-artifact@v4
         if: failure()
