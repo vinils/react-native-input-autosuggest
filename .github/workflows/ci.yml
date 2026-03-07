@@ -152,7 +152,7 @@ jobs:
           extract_dir: .
 
       - name: Publishing YARN
-        run: yarn publish ./package.tgz
+        run: yarn publish ./package
 
       - name: Upload log
         uses: actions/upload-artifact@v4
