@@ -124,6 +124,26 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
         continue-on-error: true
 
+      - name: Install example
+        run: yarn --cwd ./example install
+        continue-on-error: true
+
+      - name: Build example
+        run: yarn --cwd ./example expo export --platform web
+        continue-on-error: true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        continue-on-error: true
+
+      - name: Upload example artifact
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: actions/upload-pages-artifact@v4
+        with:
+          name: examplepg-${{ matrix.os }}
+          path: './example/dist'
+        continue-on-error: true
+
   publish:
     needs: OS
     runs-on: ubuntu-latest
@@ -152,3 +172,21 @@ jobs:
           name: publish-logs
           path: /home/runner/.npm/_logs/*.log
           retention-days: 30
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: OS
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: examplepg-ubuntu-latest
