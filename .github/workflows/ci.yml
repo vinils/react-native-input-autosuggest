@@ -39,7 +39,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  OS:
+  build:
     name: ${{ matrix.os }}
     strategy:
       matrix:
@@ -145,7 +145,7 @@ jobs:
         continue-on-error: true
 
   publish:
-    needs: OS
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -176,7 +176,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    needs: OS
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
