@@ -124,6 +124,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
         continue-on-error: true
 
+      - name: Build example
+        run: yarn --cwd ./example build
+        continue-on-error: true
+
   publish:
     needs: OS
     runs-on: ubuntu-latest
