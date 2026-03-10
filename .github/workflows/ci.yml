@@ -129,7 +129,7 @@ jobs:
         continue-on-error: true
 
       - name: Build example
-        run: yarn --cwd ./example expo export --platform web
+        run: yarn --cwd ./example export:web
         continue-on-error: true
 
       - name: Setup Pages
