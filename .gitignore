@@ -1,5 +1,7 @@
 junit.xml
 
+example/dist
+
 # OSX
 #
 .DS_Store
