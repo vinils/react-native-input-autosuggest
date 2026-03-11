@@ -63,7 +63,7 @@ jobs:
         run: |
           VERSION_OLD=$(node -p "require('./package.json').version")
           # e.g. version:  0.1.9-rc.13-1
-          echo "VERSION=${VERSION_OLD}-${{ github.run_number }}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION_OLD}-${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
       - name: Set version with date
         shell: bash
