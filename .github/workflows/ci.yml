@@ -141,7 +141,6 @@ jobs:
         continue-on-error: true
 
       - name: Upload example artifact
-        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-pages-artifact@v4
         with:
           name: examplepg-${{ matrix.os }}
