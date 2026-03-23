@@ -15,12 +15,16 @@ runs:
         cd example/ios
         pod install --repo-update
       shell: bash
-    - run: xcodebuild -workspace ios/example.xcworkspace \
-        -scheme example \
-        -sdk iphoneos  \
-        -configuration Release \
-        -derivedDataPath build
+    - name: Build iOS (Simulator)
+      run: |
+        xcodebuild -workspace ios/example.xcworkspace \
+          -scheme example \
+          -configuration Release \
+          -sdk iphonesimulator \
+          -derivedDataPath build
       shell: bash
+
+
     # - name: Build iOS App
     #   run: nnpx react-native run-ios --mode Release
     #   shell: bash
