@@ -3,10 +3,10 @@ description: "Android Linux Build"
 runs:
   using: "composite"
   steps:
-    - run: chmod +x exemple/android/gradlew
+    - run: chmod +x example/android/gradlew
       shell: bash
     - run: |
-        cd exemple/android
+        cd example/android
         ./gradlew assembleRelease --no-daemon --warning-mode all
       shell: bash
     - uses: actions/upload-artifact@v4
