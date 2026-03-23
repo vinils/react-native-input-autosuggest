@@ -15,11 +15,11 @@ runs:
         cd example/ios
         pod install --repo-update
       shell: bash
-    # - run: xcodebuild -workspace ios/YourAppName.xcworkspace \
-    #     -scheme YourAppName \
-    #     -configuration Release \
-    #     -derivedDataPath build
-    #   shell: bash
-    - name: Build iOS App
-      run: nnpx react-native run-ios --mode Release
+    - run: xcodebuild -workspace ios/YourAppName.xcworkspace \
+        -scheme YourAppName \
+        -configuration Release \
+        -derivedDataPath build
       shell: bash
+    # - name: Build iOS App
+    #   run: nnpx react-native run-ios --mode Release
+    #   shell: bash
