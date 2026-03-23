@@ -124,10 +124,6 @@ jobs:
   #         token: ${{ secrets.CODECOV_TOKEN }}
   #       continue-on-error: true
 
-      - name: Install example
-        run: yarn --cwd ./example install
-        continue-on-error: true
-
       - uses: actions/setup-java@v4
         with: {java-version: '17', distribution: 'temurin', cache: 'gradle'}
       # - uses: actions/setup-node@v3
@@ -135,6 +131,10 @@ jobs:
 
       - name: Run RN Community CLI
         run: npx @react-native-community/cli doctor
+
+      - name: Install example
+        run: yarn --cwd ./example install
+        continue-on-error: true
 
       - uses: actions/checkout@v4
       - name: Run Android Linux build composite action
