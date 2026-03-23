@@ -1,0 +1,13 @@
+name: "IOS Linux Build"
+description: "IOS Linux Build"
+runs:
+  using: "composite"
+  steps:
+    - run: chmod +x example/android/gradlew
+      shell: bash
+    - run: |
+        cd example/ios
+        pod install --repo-update
+      shell: bash
+    - run: xcodebuild -workspace ios/YourAppName.xcworkspace -scheme YourAppName -configuration Release -derivedDataPath build
+      shell: bash
