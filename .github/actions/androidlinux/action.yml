@@ -5,6 +5,24 @@ runs:
   steps:
     - run: chmod +x example/android/gradlew
       shell: bash
+
+    - uses: actions/setup-java@v4
+      with: 
+        java-version: '17' 
+        distribution: 'temurin'
+        cache: 'gradle'
+    # - uses: actions/setup-node@v3
+    #   with: {node-version: '18.x', cache: 'yarn'}
+
+    - name: Run RN Community CLI
+      run: npx @react-native-community/cli doctor
+      shell: bash
+
+    - name: Install example
+      run: yarn --cwd ./example install
+      shell: bash
+      continue-on-error: true
+
     - run: |
         cd example/android
         ./gradlew assembleRelease --no-daemon --warning-mode all
