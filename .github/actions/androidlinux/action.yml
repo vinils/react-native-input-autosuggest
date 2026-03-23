@@ -21,7 +21,6 @@ runs:
     - name: Install example
       run: yarn --cwd ./example install
       shell: bash
-      continue-on-error: true
 
     - run: |
         cd example/android

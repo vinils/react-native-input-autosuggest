@@ -7,6 +7,10 @@ runs:
       run: npx @react-native-community/cli doctor
       shell: bash
 
+    - name: Install example
+      run: yarn --cwd ./example install
+      shell: bash
+
     - run: |
         cd example/ios
         pod install --repo-update
