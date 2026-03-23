@@ -1,0 +1,13 @@
+name: "Android Linux Build"
+description: "Android Linux Build"
+runs:
+  using: "composite"
+  steps:
+    - run: chmod +x android/gradlew
+    - run: |
+        cd exemple/android
+        ./gradlew assembleRelease --no-daemon --warning-mode all
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-release-android
+        path: android/app/build/outputs/apk/release/*.apk
