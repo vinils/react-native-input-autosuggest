@@ -14,10 +14,6 @@ runs:
     # - uses: actions/setup-node@v3
     #   with: {node-version: '18.x', cache: 'yarn'}
 
-    - name: Run RN Community CLI
-      run: npx @react-native-community/cli doctor
-      shell: bash
-
     - name: Install example
       run: yarn --cwd ./example install
       shell: bash
