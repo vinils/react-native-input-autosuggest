@@ -128,6 +128,14 @@ jobs:
         run: yarn --cwd ./example install
         continue-on-error: true
 
+      - uses: actions/setup-java@v4
+        with: {java-version: '17', distribution: 'temurin', cache: 'gradle'}
+      # - uses: actions/setup-node@v3
+      #   with: {node-version: '18.x', cache: 'yarn'}
+
+      - name: Run RN Community CLI
+        run: npx @react-native-community/cli doctor
+
       - uses: actions/checkout@v4
       - name: Run Android Linux build composite action
         if: ${{ runner.os == 'Linux' }}
