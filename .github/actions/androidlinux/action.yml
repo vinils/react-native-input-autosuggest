@@ -3,7 +3,7 @@ description: "Android Linux Build"
 runs:
   using: "composite"
   steps:
-    - run: chmod +x android/gradlew
+    - run: chmod +x exemple/android/gradlew
       shell: bash
     - run: |
         cd exemple/android
