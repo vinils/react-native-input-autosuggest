@@ -15,8 +15,8 @@ runs:
         cd example/ios
         pod install --repo-update
       shell: bash
-    - run: xcodebuild -workspace ios/YourAppName.xcworkspace \
-        -scheme YourAppName \
+    - run: xcodebuild -workspace ios/example.xcworkspace \
+        -scheme example \
         -sdk iphoneos  \
         -configuration Release \
         -derivedDataPath build
