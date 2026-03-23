@@ -18,7 +18,7 @@ runs:
     - name: Build iOS (Simulator)
       run: |
         cd example/ios
-        xcodebuild -workspace ios/example.xcworkspace \
+        xcodebuild -workspace example.xcworkspace \
           -scheme example \
           -configuration Release \
           -sdk iphonesimulator \
