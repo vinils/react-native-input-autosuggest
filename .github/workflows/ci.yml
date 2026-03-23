@@ -131,7 +131,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Android Linux build composite action
         if: ${{ runner.os == 'Linux' }}
-        uses: ./.github/actions/android.yml
+        uses: ./.github/actions/androidlinux
 
   #     - name: adding built component
   #       run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
