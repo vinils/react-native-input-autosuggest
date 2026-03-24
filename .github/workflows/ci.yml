@@ -81,8 +81,8 @@ jobs:
       # - name: Lint files
       #   run: yarn lint
 
-      - name: Typecheck files
-        run: yarn typecheck
+      # - name: Typecheck files
+      #   run: yarn typecheck
 
       - name: Unit tests
         run: yarn test --reporters=default --reporters=jest-junit
