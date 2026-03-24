@@ -25,4 +25,4 @@ runs:
     - uses: actions/upload-artifact@v4
       with:
         name: app-release-android
-        path: android/app/build/outputs/apk/release/*.apk
+        path: example/android/app/build/outputs/apk/release/*.apk

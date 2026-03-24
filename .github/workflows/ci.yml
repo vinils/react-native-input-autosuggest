@@ -205,7 +205,7 @@ jobs:
         uses: ./.github/actions/androidlinux
 
       - uses: actions/checkout@v4
-      - name: Run Android Linux build composite action
+      - name: Run IOS Linux build composite action
         if: ${{ runner.os == 'macOS' }}
         uses: ./.github/actions/ioslinux
 
