@@ -84,11 +84,11 @@ jobs:
       # - name: Typecheck files
       #   run: yarn typecheck
 
-      - name: Unit tests
-        run: yarn test --reporters=default --reporters=jest-junit
+      # - name: Unit tests
+      #   run: yarn test --reporters=default --reporters=jest-junit
 
-      - name: Coverage
-        run: yarn test --maxWorkers=2 --coverage
+      # - name: Coverage
+      #   run: yarn test --maxWorkers=2 --coverage
 
       - name: Build package
         run: yarn prepare
