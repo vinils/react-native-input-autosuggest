@@ -21,7 +21,8 @@ runs:
           -derivedDataPath build
       shell: bash
 
-
-    # - name: Build iOS App
-    #   run: nnpx react-native run-ios --mode Release
-    #   shell: bash
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-output
+        path: build/*.ipa # Or paths to .app, .xcarchive
