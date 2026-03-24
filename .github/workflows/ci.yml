@@ -195,9 +195,8 @@ jobs:
           corepack enable
           yarn set version 4.11.0
 
-      - name: adding built component
-        run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
-        continue-on-error: true
+      # - name: adding built component
+      #   run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
 
       - uses: actions/checkout@v4
       - name: Run Android Linux build composite action
