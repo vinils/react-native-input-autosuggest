@@ -173,7 +173,7 @@ jobs:
 
 
   buildexample:
-    name: ${{ matrix.os }}
+    name: example-${{ matrix.os }}
     needs: build
     strategy:
       matrix:
