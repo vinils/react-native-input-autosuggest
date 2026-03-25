@@ -28,7 +28,7 @@ runs:
     #     xcodebuild archive \
     #       -workspace example.xcworkspace \
     #       -scheme example \
-    #       -archivePath build/YourApp.xcarchive
+    #       -archivePath build/example.xcarchive
     #   shell: bash
 
     - name: Build iOS Export
@@ -36,7 +36,7 @@ runs:
         cd example/ios
         xcodebuild \
           -exportArchive \
-          -archivePath build/YourApp.xcarchive \
+          -archivePath build/example.xcarchive \
           -exportPath build/ \
           -exportOptionsPlist ios/ExportOptions.plist
       shell: bash
