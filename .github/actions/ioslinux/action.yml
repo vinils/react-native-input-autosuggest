@@ -26,19 +26,19 @@ runs:
       run: |
         cd example/ios
         xcodebuild archive \
-        -workspace example.xcworkspace \
-        -scheme example \
-        -archivePath build/YourApp.xcarchive
+          -workspace example.xcworkspace \
+          -scheme example \
+          -archivePath build/YourApp.xcarchive
       shell: bash
 
     - name: Build iOS Export
       run: |
         cd example/ios
         xcodebuild \
-        -exportArchive \
-        -archivePath build/YourApp.xcarchive \
-        -exportPath build/ \
-        -exportOptionsPlist ios/ExportOptions.plist
+          -exportArchive \
+          -archivePath build/YourApp.xcarchive \
+          -exportPath build/ \
+          -exportOptionsPlist ios/ExportOptions.plist
       shell: bash
 
     - name: Upload Artifact
