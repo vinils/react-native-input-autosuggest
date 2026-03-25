@@ -22,27 +22,28 @@ runs:
     #       -derivedDataPath build
     #   shell: bash
 
-    - name: Build iOS
+    - name: Build and Archive
       run: |
         cd example/ios
-        xcodebuild archive \
+        xcodebuild clean archive \
           -workspace example.xcworkspace \
           -scheme example \
-          -archivePath build/example.xcarchive
+          -configuration Release \
+          -archivePath $PWD/build/example.xcarchive \
+          CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE="" OTHER_CODE_SIGN_FLAGS="--no-sign"
       shell: bash
 
-    - name: Build iOS Export
+    - name: Export IPA
       run: |
         cd example/ios
-        xcodebuild \
-          -exportArchive \
-          -archivePath build/example.xcarchive \
-          -exportPath build/ \
-          -exportOptionsPlist ios/ExportOptions.plist
+        xcodebuild -exportArchive \
+          -archivePath $PWD/build/example.xcarchive \
+          -exportOptionsPlist $PWD/ExportOptions.plist \
+          -exportPath $PWD/build
       shell: bash
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: ios-build-output
-        path: example/ios/build/*.ipa # Or paths to .app, .xcarchive
+        path: example/ios/build/*.ipa
