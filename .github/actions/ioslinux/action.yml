@@ -11,14 +11,24 @@ runs:
         cd example/ios
         pod install --repo-update
       shell: bash
+
+    # - name: Build iOS (Simulator)
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild -workspace example.xcworkspace \
+    #       -scheme example \
+    #       -configuration Release \
+    #       -sdk iphonesimulator \
+    #       -derivedDataPath build
+    #   shell: bash
+
     - name: Build iOS (Simulator)
       run: |
         cd example/ios
-        xcodebuild -workspace example.xcworkspace \
-          -scheme example \
-          -configuration Release \
-          -sdk iphonesimulator \
-          -derivedDataPath build
+        xcodebuild archive /
+        -workspace example.xcworkspace /
+        -scheme example /
+        -archivePath build/YourApp.xcarchive
       shell: bash
 
     - name: Upload Artifact
