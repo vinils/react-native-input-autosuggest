@@ -22,19 +22,25 @@ runs:
     #       -derivedDataPath build
     #   shell: bash
 
-    - name: Build App
+    - name: Build Workspace
       run: |
         cd example/ios
         xcodebuild build \
           -workspace example.xcworkspace \
-          -scheme example
+          -scheme example \
           # -configuration Release \
           # -sdk iphoneos \
-          # -derivedDataPath ./build-output \
+          -derivedDataPath ./build-output
           # CODE_SIGNING_ALLOWED=NO  # Optional: use if you don't have certs set up yet
       shell: bash
 
-    - name: Build App
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-build-output
+        path: example/ios/build-output/* 
+
+    - name: Archive Workspace
       run: |
         cd example/ios
         xcodebuild archive \
@@ -47,7 +53,7 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ios-build-output
-        path: example/ios/archive/*.xcarchive
+        path: example/ios/archive/*.xcarchive 
 
     # - name: Build and Archive
     #   run: |
