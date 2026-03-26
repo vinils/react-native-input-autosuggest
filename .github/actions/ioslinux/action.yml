@@ -53,7 +53,7 @@ runs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ios-build-output
+        name: ios-archive-output
         path: example/ios/archive/*.xcarchive 
 
     # - name: Build and Archive
