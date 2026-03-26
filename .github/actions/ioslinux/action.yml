@@ -22,28 +22,55 @@ runs:
     #       -derivedDataPath build
     #   shell: bash
 
-    - name: Build and Archive
+    - name: Build App
       run: |
         cd example/ios
-        xcodebuild clean archive \
+        xcodebuild build \
           -workspace example.xcworkspace \
-          -scheme example \
-          -configuration Release \
-          -archivePath $PWD/build/example.xcarchive \
-          CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE="" OTHER_CODE_SIGN_FLAGS="--no-sign"
+          -scheme example
+          # -configuration Release \
+          # -sdk iphoneos \
+          # -derivedDataPath ./build-output \
+          # CODE_SIGNING_ALLOWED=NO  # Optional: use if you don't have certs set up yet
       shell: bash
 
-    - name: Export IPA
+    - name: Build App
       run: |
         cd example/ios
-        xcodebuild -exportArchive \
-          -archivePath $PWD/build/example.xcarchive \
-          -exportOptionsPlist $PWD/ExportOptions.plist \
-          -exportPath $PWD/build
+        xcodebuild archive \
+          -workspace example.xcworkspace \
+          -scheme example
+          -archivePath ./archive/example.xcarchive
       shell: bash
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: ios-build-output
-        path: example/ios/build/*.ipa
+        path: example/ios/archive/*.xcarchive
+
+    # - name: Build and Archive
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild clean archive \
+    #       -workspace example.xcworkspace \
+    #       -scheme example \
+    #       -configuration Release \
+    #       -archivePath $PWD/build/example.xcarchive \
+    #       CODE_SIGN_IDENTITY="" PROVISIONING_PROFILE="" OTHER_CODE_SIGN_FLAGS="--no-sign"
+    #   shell: bash
+
+    # - name: Export IPA
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild -exportArchive \
+    #       -archivePath $PWD/build/example.xcarchive \
+    #       -exportOptionsPlist $PWD/ExportOptions.plist \
+    #       -exportPath $PWD/build
+    #   shell: bash
+
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ios-build-output
+    #     path: example/ios/build/*.ipa
