@@ -28,11 +28,11 @@ runs:
         xcodebuild build \
           -workspace example.xcworkspace \
           -scheme example \
-          \ # -configuration Release \
-          \ # -sdk iphoneos \
           -derivedDataPath ./build-output \
           CODE_SIGNING_ALLOWED=NO  # Optional: use if you don't have certs set up yet
           # DEVELOPMENT_TEAM="YOUR_TEAM_ID"
+          # -configuration Release \
+          # -sdk iphoneos \
       shell: bash
 
     - name: Upload build
