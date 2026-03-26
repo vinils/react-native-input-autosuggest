@@ -48,7 +48,9 @@ runs:
           -workspace example.xcworkspace \
           -scheme example \
           -configuration Release \
-          -archivePath ./archive/example.xcarchive
+          -archivePath ./archive/example.xcarchive \
+          # SKIP_INSTALL=NO \
+          # BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
       shell: bash
 
     - name: Upload Artifact
