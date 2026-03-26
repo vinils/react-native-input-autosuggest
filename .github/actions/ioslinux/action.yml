@@ -46,7 +46,7 @@ runs:
         cd example/ios
         xcodebuild archive \
           -workspace example.xcworkspace \
-          -scheme example
+          -scheme example \
           -archivePath ./archive/example.xcarchive
       shell: bash
 
