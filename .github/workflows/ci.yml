@@ -225,8 +225,8 @@ jobs:
             -workspace example.xcworkspace \
             -scheme example \
             -derivedDataPath ./build-output \
-            CODE_SIGNING_ALLOWED=NO  # Optional: use if you don't have certs set up yet
-            # DEVELOPMENT_TEAM="YOUR_TEAM_ID"
+            DEVELOPMENT_TEAM="64F9WR9M48"
+            # CODE_SIGNING_ALLOWED=NO
             # -configuration Release \
             # -sdk iphoneos \
         shell: bash
@@ -245,7 +245,9 @@ jobs:
             -scheme example \
             -configuration Release \
             -archivePath ./archive/example.xcarchive \
-            CODE_SIGNING_ALLOWED=NO
+            DEVELOPMENT_TEAM="64F9WR9M48"
+            # CODE_SIGNING_ALLOWED=NO
+            # CODE_SIGN_STYLE=Manual
             # SKIP_INSTALL=NO \
             # BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
         shell: bash
@@ -255,6 +257,22 @@ jobs:
         with:
           name: ios-archive-output
           path: example/ios/archive/*.xcarchive 
+
+      - name: ipa
+        run: |
+          cd example/ios
+          xcodebuild -exportArchive \
+            -archivePath ./archive/example.xcarchive \
+            -exportPath ./build/ipa \
+            -exportOptionsPlist ./ExportOptions.plist \
+            -allowProvisioningUpdates
+        shell: bash
+
+      - name: Upload ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa-output
+          path: example/ios/build/ipa/*.ipa
 
 
 
