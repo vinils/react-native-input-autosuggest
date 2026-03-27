@@ -198,15 +198,63 @@ jobs:
       # - name: adding built component
       #   run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
 
-      - uses: actions/checkout@v4
-      - name: Run Android Linux build composite action
-        if: ${{ runner.os == 'Linux' }}
-        uses: ./.github/actions/androidlinux
+      # - uses: actions/checkout@v4
+      # - name: Run Android Linux build composite action
+      #   if: ${{ runner.os == 'Linux' }}
+      #   uses: ./.github/actions/androidlinux
 
-      - uses: actions/checkout@v4
-      - name: Run IOS Linux build composite action
-        if: ${{ runner.os == 'macOS' }}
-        uses: ./.github/actions/ioslinux
+      # - uses: actions/checkout@v4
+      # - name: Run IOS Linux build composite action
+      #   if: ${{ runner.os == 'macOS' }}
+      #   uses: ./.github/actions/ioslinux
+
+      - name: Install example
+        run: yarn --cwd ./example install
+        shell: bash
+
+      - run: |
+          cd example/ios
+          pod install --repo-update
+        shell: bash
+
+      - name: Build Workspace
+        run: |
+          cd example/ios
+          xcodebuild build \
+            -workspace example.xcworkspace \
+            -scheme example \
+            -derivedDataPath ./build-output \
+            CODE_SIGNING_ALLOWED=NO  # Optional: use if you don't have certs set up yet
+            # DEVELOPMENT_TEAM="YOUR_TEAM_ID"
+            # -configuration Release \
+            # -sdk iphoneos \
+        shell: bash
+
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-output
+          path: example/ios/build-output/* 
+
+      - name: Archive Workspace
+        run: |
+          cd example/ios
+          xcodebuild archive \
+            -workspace example.xcworkspace \
+            -scheme example \
+            -configuration Release \
+            -archivePath ./archive/example.xcarchive \
+            # SKIP_INSTALL=NO \
+            # BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
+        shell: bash
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-archive-output
+          path: example/ios/archive/*.xcarchive 
+
+
 
       # - name: Build example
       #   run: yarn --cwd ./example export:web
