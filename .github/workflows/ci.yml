@@ -262,7 +262,7 @@ jobs:
             -archivePath ./archive/example.xcarchive \
             -exportPath ./build/ipa \
             -exportOptionsPlist ./ExportOptions.plist
-            -allowProvisioningUpdates
+            # -allowProvisioningUpdates
         shell: bash
 
       - name: Upload ipa
