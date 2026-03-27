@@ -245,6 +245,7 @@ jobs:
             -scheme example \
             -configuration Release \
             -archivePath ./archive/example.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
             SWIFT_OPTIMIZATION_LEVEL = 0
             # SKIP_INSTALL=NO \
             # BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
