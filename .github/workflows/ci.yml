@@ -246,10 +246,7 @@ jobs:
             -configuration Release \
             -archivePath ./archive/example.xcarchive \
             CODE_SIGNING_ALLOWED=NO
-            # DEVELOPMENT_TEAM="64F9WR9M48"
-            # CODE_SIGN_STYLE=Manual
-            # SKIP_INSTALL=NO \
-            # BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
+            # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
         shell: bash
 
       - name: Upload Artifact
@@ -258,21 +255,21 @@ jobs:
           name: ios-archive-output
           path: example/ios/archive/*.xcarchive 
 
-      # - name: ipa
-      #   run: |
-      #     cd example/ios
-      #     xcodebuild -exportArchive \
-      #       -archivePath ./archive/example.xcarchive \
-      #       -exportPath ./build/ipa \
-      #       -exportOptionsPlist ./ExportOptions.plist \
-      #       -allowProvisioningUpdates
-      #   shell: bash
+      - name: ipa
+        run: |
+          cd example/ios
+          xcodebuild -exportArchive \
+            -archivePath ./archive/example.xcarchive \
+            -exportPath ./build/ipa \
+            -exportOptionsPlist ./ExportOptions.plist
+            -allowProvisioningUpdates
+        shell: bash
 
-      # - name: Upload ipa
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ios-ipa-output
-      #     path: example/ios/build/ipa/*.ipa
+      - name: Upload ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa-output
+          path: example/ios/build/ipa/*.ipa
 
 
 

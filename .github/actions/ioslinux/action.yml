@@ -3,6 +3,31 @@ description: "IOS Linux Build"
 runs:
   using: "composite"
   steps:
+    # - name: Setup Keychain and Provisioning Profile
+    # env:
+    #   BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+    #   P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+    #   BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+    #   KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    # run: |
+    #   # Create a temporary keychain
+    #   security create-keychain -p "$KEYCHAIN_PASSWORD" ios-build.keychain
+    #   security unlock-keychain -p "$KEYCHAIN_PASSWORD" ios-build.keychain
+    #   security default-keychain -s ios-build.keychain
+    #   security set-keychain-settings -lut 21600 ios-build.keychain
+
+    #   # Decode and import the certificate into the keychain
+    #   echo $BUILD_CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+    #   security import certificate.p12 -k ios-build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+
+    #   # Create the provisioning profiles directory and decode the profile
+    #   mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    #   echo $BUILD_PROVISION_PROFILE_BASE64 | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
+
+    #   # Verify installation (optional)
+    #   security find-identity -p codesigning
+    #   shell: bash
+
     - name: Install example
       run: yarn --cwd ./example install
       shell: bash
