@@ -1,0 +1,121 @@
+name: "IOS Linux Build"
+description: "IOS Linux Build"
+runs:
+  using: "composite"
+  steps:
+    # - name: Setup Keychain and Provisioning Profile
+    # env:
+    #   BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+    #   P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+    #   BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+    #   KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    # run: |
+    #   # Create a temporary keychain
+    #   security create-keychain -p "$KEYCHAIN_PASSWORD" ios-build.keychain
+    #   security unlock-keychain -p "$KEYCHAIN_PASSWORD" ios-build.keychain
+    #   security default-keychain -s ios-build.keychain
+    #   security set-keychain-settings -lut 21600 ios-build.keychain
+
+    #   # Decode and import the certificate into the keychain
+    #   echo $BUILD_CERTIFICATE_BASE64 | base64 --decode > certificate.p12
+    #   security import certificate.p12 -k ios-build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+
+    #   # Create the provisioning profiles directory and decode the profile
+    #   mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    #   echo $BUILD_PROVISION_PROFILE_BASE64 | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
+
+    #   # Verify installation (optional)
+    #   security find-identity -p codesigning
+    #   shell: bash
+
+    # - name: Install Certificate & Profile
+    #   env:
+    #     CERT_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+    #     P12_PWD: ${{ secrets.P12_PASSWORD }}
+    #     PP_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+    #     KEYCHAIN_PWD: ${{ secrets.KEYCHAIN_PASSWORD }}
+    #   run: |
+    #     # 1. Decode and install certificate/profile (Logic based on)
+    #     CERT_PATH=$RUNNER_TEMP/build_cert.p12
+    #     PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+    #     KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+    #     echo -n "$CERT_BASE64" | base64 --decode -o $CERT_PATH
+    #     echo -n "$PP_BASE64" | base64 --decode -o $PP_PATH
+
+    #     security create-keychain -p "$KEYCHAIN_PWD" $KEYCHAIN_PATH
+    #     security import $CERT_PATH -P "$P12_PWD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+    #     security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PWD" $KEYCHAIN_PATH
+
+    #     mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+    #     cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    #   shell: bash
+
+    - name: Install example
+      run: yarn --cwd ./example install
+      shell: bash
+
+    - run: |
+        cd example/ios
+        pod install --repo-update
+      shell: bash
+
+    # - name: Build Workspace
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild build \
+    #       -workspace example.xcworkspace \
+    #       -scheme example \
+    #       -derivedDataPath ./build-output \
+    #       DEVELOPMENT_TEAM="64F9WR9M48"
+    #       # CODE_SIGNING_ALLOWED=NO
+    #       # -configuration Release \
+    #       # -sdk iphoneos \
+    #       # -sdk iphonesimulator \
+    #   shell: bash
+
+    # - name: Upload build
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ios-build-output
+    #     path: example/ios/build-output/*
+
+
+    - name: Archive Workspace
+      run: |
+        cd example/ios
+        xcodebuild clean archive \
+          -workspace example.xcworkspace \
+          -scheme example \
+          -configuration Release \
+          -archivePath ./archive/example.xcarchive \
+          CODE_SIGNING_ALLOWED=NO
+          # CODE_SIGNING_ALLOWED=YES \
+          # CODE_SIGNING_REQUIRED=YES \
+          # CODE_SIGN_STYLE=Manual \
+          # PROVISIONING_PROFILE_SPECIFIER="Your_Profile_Name" \
+          # CODE_SIGN_IDENTITY="Apple Distribution"
+          # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
+      shell: bash
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-archive-output
+        path: example/ios/archive/*.xcarchive
+
+    # - name: ipa
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild -exportArchive \
+    #       -archivePath ./archive/example.xcarchive \
+    #       -exportPath ./build/ipa \
+    #       -exportOptionsPlist ./ExportOptions.plist
+    #       # -allowProvisioningUpdates
+    #   shell: bash
+
+    # - name: Upload ipa
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ios-ipa-output
+    #     path: example/ios/build/ipa/*.ipa
