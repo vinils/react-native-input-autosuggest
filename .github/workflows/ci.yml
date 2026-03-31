@@ -153,25 +153,6 @@ jobs:
           path: /home/runner/.npm/_logs/*.log
           retention-days: 30
 
-  deploy:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: examplepg-ubuntu-latest
-
-
   buildexample:
     name: example-${{ matrix.os }}
     needs: build
@@ -222,3 +203,21 @@ jobs:
       #     name: examplepg-${{ matrix.os }}
       #     path: './example/dist'
       #   continue-on-error: true
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   needs: buildexample
+  #   environment:
+  #     name: github-pages
+  #     url: ${{ steps.deployment.outputs.page_url }}
+  #   permissions:
+  #     contents: read
+  #     pages: write
+  #     id-token: write
+  #   steps:
+  #     - name: Deploy to GitHub Pages
+  #       id: deployment
+  #       uses: actions/deploy-pages@v4
+  #       with:
+  #         artifact_name: examplepg-ubuntu-latest
