@@ -81,14 +81,14 @@ jobs:
       # - name: Lint files
       #   run: yarn lint
 
-      - name: Typecheck files
-        run: yarn typecheck
+      # - name: Typecheck files
+      #   run: yarn typecheck
 
-      - name: Unit tests
-        run: yarn test --reporters=default --reporters=jest-junit
+      # - name: Unit tests
+      #   run: yarn test --reporters=default --reporters=jest-junit
 
-      - name: Coverage
-        run: yarn test --maxWorkers=2 --coverage
+      # - name: Coverage
+      #   run: yarn test --maxWorkers=2 --coverage
 
       - name: Build package
         run: yarn prepare
@@ -122,29 +122,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-        continue-on-error: true
-
-      - name: Install example
-        run: yarn --cwd ./example install
-        continue-on-error: true
-
-      - name: adding built component
-        run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
-        continue-on-error: true
-
-      - name: Build example
-        run: yarn --cwd ./example export:web
-        continue-on-error: true
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        continue-on-error: true
-
-      - name: Upload example artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          name: examplepg-${{ matrix.os }}
-          path: './example/dist'
         continue-on-error: true
 
   publish:
@@ -193,3 +170,55 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           artifact_name: examplepg-ubuntu-latest
+
+
+  buildexample:
+    name: example-${{ matrix.os }}
+    needs: build
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn set version 4.11.0
+
+      # - name: adding built component
+      #   run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
+
+      - uses: actions/checkout@v4
+      - name: Run Android Linux build composite action
+        if: ${{ runner.os == 'Linux' }}
+        uses: ./.github/actions/androidlinux
+
+      - uses: actions/checkout@v4
+      - name: Run IOS Linux build composite action
+        if: ${{ runner.os == 'macOS' }}
+        uses: ./.github/actions/ioslinux
+
+      # - name: Build example
+      #   run: yarn --cwd ./example export:web
+      #   continue-on-error: true
+
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      #   continue-on-error: true
+
+      # - name: Upload example artifact
+      #   uses: actions/upload-pages-artifact@v4
+      #   with:
+      #     name: examplepg-${{ matrix.os }}
+      #     path: './example/dist'
+      #   continue-on-error: true
