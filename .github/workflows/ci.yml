@@ -191,7 +191,7 @@ jobs:
           cache: 'yarn'
 
       - name: Enable Corepack
-        run: | 
+        run: |
           corepack enable
           yarn set version 4.11.0
 
@@ -222,4 +222,3 @@ jobs:
       #     name: examplepg-${{ matrix.os }}
       #     path: './example/dist'
       #   continue-on-error: true
-
