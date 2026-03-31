@@ -104,18 +104,18 @@ runs:
         name: ios-archive-output
         path: example/ios/archive/*.xcarchive 
 
-    - name: ipa
-      run: |
-        cd example/ios
-        xcodebuild -exportArchive \
-          -archivePath ./archive/example.xcarchive \
-          -exportPath ./build/ipa \
-          -exportOptionsPlist ./ExportOptions.plist
-          # -allowProvisioningUpdates
-      shell: bash
+    # - name: ipa
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild -exportArchive \
+    #       -archivePath ./archive/example.xcarchive \
+    #       -exportPath ./build/ipa \
+    #       -exportOptionsPlist ./ExportOptions.plist
+    #       # -allowProvisioningUpdates
+    #   shell: bash
 
-    - name: Upload ipa
-      uses: actions/upload-artifact@v4
-      with:
-        name: ios-ipa-output
-        path: example/ios/build/ipa/*.ipa
+    # - name: Upload ipa
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ios-ipa-output
+    #     path: example/ios/build/ipa/*.ipa
