@@ -39,146 +39,145 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # build:
-  #   name: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest, macos-latest]
-  #     fail-fast: false
-  #   runs-on: ${{ matrix.os }}
-  #   permissions:
-  #     contents: write # Required to push tags
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+  build:
+    name: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # Required to push tags
+    steps:
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-  #       with:
-  #         node-version-file: .nvmrc
-  #         cache: 'yarn'
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
 
-  #     - name: Get new version
-  #       shell: bash
-  #       run: |
-  #         VERSION_OLD=$(node -p "require('./package.json').version")
-  #         # e.g. version:  0.1.9-rc.13-1
-  #         echo "VERSION=${VERSION_OLD}-${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
+      - name: Get new version
+        shell: bash
+        run: |
+          VERSION_OLD=$(node -p "require('./package.json').version")
+          # e.g. version:  0.1.9-rc.13-1
+          echo "VERSION=${VERSION_OLD}-${{ github.run_number }}${{ github.run_attempt }}" >> $GITHUB_ENV
 
-  #     - name: Set version with date
-  #       shell: bash
-  #       run: |
-  #         npm version $VERSION --no-git-tag-version
+      - name: Set version with date
+        shell: bash
+        run: |
+          npm version $VERSION --no-git-tag-version
 
-  #     - name: Enable Corepack
-  #       run: | 
-  #         corepack enable
-  #         yarn set version 4.11.0
+      - name: Enable Corepack
+        run: | 
+          corepack enable
+          yarn set version 4.11.0
 
-  #     - name: Install dependencies
-  #       run: yarn install --immutable
+      - name: Install dependencies
+        run: yarn install --immutable
 
-  #     # - name: Lint files
-  #     #   run: yarn lint
+      # - name: Lint files
+      #   run: yarn lint
 
-  #     # - name: Typecheck files
-  #     #   run: yarn typecheck
+      # - name: Typecheck files
+      #   run: yarn typecheck
 
-  #     # - name: Unit tests
-  #     #   run: yarn test --reporters=default --reporters=jest-junit
+      # - name: Unit tests
+      #   run: yarn test --reporters=default --reporters=jest-junit
 
-  #     # - name: Coverage
-  #     #   run: yarn test --maxWorkers=2 --coverage
+      # - name: Coverage
+      #   run: yarn test --maxWorkers=2 --coverage
 
-  #     - name: Build package
-  #       run: yarn prepare
+      - name: Build package
+        run: yarn prepare
 
-  #     - name: Create package
-  #       run: yarn pack
+      - name: Create package
+        run: yarn pack
 
-  #     # - name: Build example for Web
-  #     #   run: |
-  #     #     yarn example expo export --platform web
+      # - name: Build example for Web
+      #   run: |
+      #     yarn example expo export --platform web
 
-  #     - name: Upload build artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build-artifact-${{ matrix.os }}
-  #         path: ./package.tgz
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact-${{ matrix.os }}
+          path: ./package.tgz
 
-  #     - name: push tag version
-  #       run: |
-  #         git tag $VERSION
-  #         git push origin $VERSION
-  #       continue-on-error: true
+      - name: push tag version
+        run: |
+          git tag $VERSION
+          git push origin $VERSION
+        continue-on-error: true
 
-  #     - name: Upload test results
-  #       uses: codecov/test-results-action@v1
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #       continue-on-error: true
+      - name: Upload test results
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true
 
-  #     - name: Upload coverage reports
-  #       uses: codecov/codecov-action@v5
-  #       with:
-  #         token: ${{ secrets.CODECOV_TOKEN }}
-  #       continue-on-error: true
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true
 
-  # publish:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     id-token: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '24'
-  #         registry-url: https://registry.npmjs.org
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://registry.npmjs.org
 
-  #     - name: Download built artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: build-artifact-ubuntu-latest
-  #         path: ./
+      - name: Download built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact-ubuntu-latest
+          path: ./
         
-  #     - name: Publishing
-  #       run: npm publish ./package.tgz --tag rc
+      - name: Publishing
+        run: npm publish ./package.tgz --tag rc
     
-  #     - name: Upload log
-  #       uses: actions/upload-artifact@v4
-  #       if: failure()
-  #       with:
-  #         name: publish-logs
-  #         path: /home/runner/.npm/_logs/*.log
-  #         retention-days: 30
+      - name: Upload log
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: publish-logs
+          path: /home/runner/.npm/_logs/*.log
+          retention-days: 30
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main'
-  #   needs: build
-  #   environment:
-  #     name: github-pages
-  #     url: ${{ steps.deployment.outputs.page_url }}
-  #   permissions:
-  #     contents: read
-  #     pages: write
-  #     id-token: write
-  #   steps:
-  #     - name: Deploy to GitHub Pages
-  #       id: deployment
-  #       uses: actions/deploy-pages@v4
-  #       with:
-  #         artifact_name: examplepg-ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: examplepg-ubuntu-latest
 
 
   buildexample:
     name: example-${{ matrix.os }}
-    # needs: build
+    needs: build
     strategy:
       matrix:
-        os: [macos-latest]
-        # os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -196,82 +195,18 @@ jobs:
           corepack enable
           yarn set version 4.11.0
 
-      # - name: adding built component
-      #   run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
+      - name: adding built component
+        run: yarn --cwd ./example add react-native-input-autosuggest@file:../package.tgz
 
-      # - uses: actions/checkout@v4
-      # - name: Run Android Linux build composite action
-      #   if: ${{ runner.os == 'Linux' }}
-      #   uses: ./.github/actions/androidlinux
+      - uses: actions/checkout@v4
+      - name: Run Android Linux build composite action
+        if: ${{ runner.os == 'Linux' }}
+        uses: ./.github/actions/androidlinux
 
-      # - uses: actions/checkout@v4
-      # - name: Run IOS Linux build composite action
-      #   if: ${{ runner.os == 'macOS' }}
-      #   uses: ./.github/actions/ioslinux
-
-      - name: Install example
-        run: yarn --cwd ./example install
-        shell: bash
-
-      - run: |
-          cd example/ios
-          pod install --repo-update
-        shell: bash
-
-      # - name: Build Workspace
-      #   run: |
-      #     cd example/ios
-      #     xcodebuild build \
-      #       -workspace example.xcworkspace \
-      #       -scheme example \
-      #       -derivedDataPath ./build-output \
-      #       DEVELOPMENT_TEAM="64F9WR9M48"
-      #       # CODE_SIGNING_ALLOWED=NO
-      #       # -configuration Release \
-      #       # -sdk iphoneos \
-      #   shell: bash
-
-      # - name: Upload build
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ios-build-output
-      #     path: example/ios/build-output/* 
-
-      - name: Archive Workspace
-        run: |
-          cd example/ios
-          xcodebuild clean archive \
-            -workspace example.xcworkspace \
-            -scheme example \
-            -configuration Release \
-            -archivePath ./archive/example.xcarchive \
-            CODE_SIGNING_ALLOWED=NO
-            # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
-        shell: bash
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-archive-output
-          path: example/ios/archive/*.xcarchive 
-
-      - name: ipa
-        run: |
-          cd example/ios
-          xcodebuild -exportArchive \
-            -archivePath ./archive/example.xcarchive \
-            -exportPath ./build/ipa \
-            -exportOptionsPlist ./ExportOptions.plist
-            # -allowProvisioningUpdates
-        shell: bash
-
-      - name: Upload ipa
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-ipa-output
-          path: example/ios/build/ipa/*.ipa
-
-
+      - uses: actions/checkout@v4
+      - name: Run IOS Linux build composite action
+        if: ${{ runner.os == 'macOS' }}
+        uses: ./.github/actions/ioslinux
 
       # - name: Build example
       #   run: yarn --cwd ./example export:web
