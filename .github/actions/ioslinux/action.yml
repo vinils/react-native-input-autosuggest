@@ -89,12 +89,12 @@ runs:
           -scheme example \
           -configuration Release \
           -archivePath ./archive/example.xcarchive \
+          CODE_SIGNING_ALLOWED=NO
           # CODE_SIGNING_ALLOWED=YES \
           # CODE_SIGNING_REQUIRED=YES \
           # CODE_SIGN_STYLE=Manual \
           # PROVISIONING_PROFILE_SPECIFIER="Your_Profile_Name" \
           # CODE_SIGN_IDENTITY="Apple Distribution"
-          CODE_SIGNING_ALLOWED=NO
           # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
       shell: bash
 
