@@ -81,21 +81,75 @@ runs:
     #     path: example/ios/build-output/*
 
 
+    # - name: Archive Workspace
+    #   run: |
+    #     cd example/ios
+    #     xcodebuild clean archive \
+    #       -workspace example.xcworkspace \
+    #       -scheme example \
+    #       -configuration Release \
+    #       -archivePath ./archive/example.xcarchive \
+    #       CODE_SIGNING_ALLOWED=NO
+    #       # CODE_SIGNING_ALLOWED=YES \
+    #       # CODE_SIGNING_REQUIRED=YES \
+    #       # CODE_SIGN_STYLE=Manual \
+    #       # PROVISIONING_PROFILE_SPECIFIER="Your_Profile_Name" \
+    #       # CODE_SIGN_IDENTITY="Apple Distribution"
+    #       # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
+    #   shell: bash
+
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ios-archive-output
+    #     path: example/ios/archive/*.xcarchive
+
+    # # - name: ipa
+    # #   run: |
+    # #     cd example/ios
+    # #     xcodebuild -exportArchive \
+    # #       -archivePath ./archive/example.xcarchive \
+    # #       -exportPath ./build/ipa \
+    # #       -exportOptionsPlist ./ExportOptions.plist
+    # #       # -allowProvisioningUpdates
+    # #   shell: bash
+
+    # # - name: Upload ipa
+    # #   uses: actions/upload-artifact@v4
+    # #   with:
+    # #     name: ios-ipa-output
+    # #     path: example/ios/build/ipa/*.ipa
+
+
     - name: Archive Workspace
       run: |
         cd example/ios
-        xcodebuild clean archive \
-          -workspace example.xcworkspace \
+        xcodebuild -workspace example.xcworkspace \
           -scheme example \
           -configuration Release \
-          -archivePath ./archive/example.xcarchive \
-          CODE_SIGNING_ALLOWED=NO
-          # CODE_SIGNING_ALLOWED=YES \
-          # CODE_SIGNING_REQUIRED=YES \
-          # CODE_SIGN_STYLE=Manual \
-          # PROVISIONING_PROFILE_SPECIFIER="Your_Profile_Name" \
-          # CODE_SIGN_IDENTITY="Apple Distribution"
-          # DEVELOPMENT_TEAM="64F9WR9M48" # DEVELOPMENT_TEAM=${#{ secrets.TEAM_ID }}
+          -sdk iphonesimulator \
+          CODE_SIGNING_ALLOWED=NO \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGN_IDENTITY="" \
+          AD_HOC_CODE_SIGNING_ALLOWED=YES
+          # -sdk iphoneos \
+      shell: bash
+
+    - name: Find file and set path as output
+      id: find_step
+      run: |
+        # Find the file path
+        FILE_PATH=$(find . -name "example.app" -print -quit)
+        # Write to GITHUB_OUTPUT using the key=value format
+        echo "found_path=$FILE_PATH" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Package IPA
+      run: |
+        cd example/ios
+        mkdir Payload
+        cp -r build/Build/Products/Release-iphoneos/example.app Payload/
+        zip -r YourApp.ipa Payload
       shell: bash
 
     - name: Upload Artifact
@@ -103,19 +157,3 @@ runs:
       with:
         name: ios-archive-output
         path: example/ios/archive/*.xcarchive
-
-    # - name: ipa
-    #   run: |
-    #     cd example/ios
-    #     xcodebuild -exportArchive \
-    #       -archivePath ./archive/example.xcarchive \
-    #       -exportPath ./build/ipa \
-    #       -exportOptionsPlist ./ExportOptions.plist
-    #       # -allowProvisioningUpdates
-    #   shell: bash
-
-    # - name: Upload ipa
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ios-ipa-output
-    #     path: example/ios/build/ipa/*.ipa
