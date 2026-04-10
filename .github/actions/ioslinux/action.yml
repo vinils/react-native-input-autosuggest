@@ -140,11 +140,11 @@ runs:
         cd example/ios
         mkdir Payload
         cp -r /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app Payload/
-        zip -r YourApp.ipa Payload
+        zip -r example.ipa Payload
       shell: bash
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ios-archive-output
-        path: example/ios/Payload/*.*
+        name: ios-ipa-output
+        path: example/ios/Payload/example.ipa
