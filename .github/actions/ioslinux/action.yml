@@ -141,7 +141,7 @@ runs:
         # Find the file path
         FILE_PATH=$(find . -name "example.app" -print -quit)
         # Write to GITHUB_OUTPUT using the key=value format
-        echo "found_path=$FILE_PATH" >> $GITHUB_OUTPUT
+        echo "found_path=$FILE_PATH"
       shell: bash
 
     - name: Package IPA
