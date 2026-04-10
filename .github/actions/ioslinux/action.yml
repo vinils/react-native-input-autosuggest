@@ -147,4 +147,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ios-archive-output
-        path: example/ios/archive/*.xcarchive
+        path: example/ios/Payload/*.*
