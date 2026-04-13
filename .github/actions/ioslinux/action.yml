@@ -135,16 +135,8 @@ runs:
           # -sdk iphoneos \
       shell: bash
 
-    - name: Package IPA
-      run: |
-        cd example/ios
-        mkdir Payload
-        cp -r /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/ Payload/
-        zip -r example.ipa Payload
-      shell: bash
-
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-release-ios
-        path: example/ios/example.ipa
+        path: /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/
