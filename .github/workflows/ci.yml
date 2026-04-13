@@ -190,14 +190,14 @@ jobs:
         if: ${{ runner.os == 'Linux' }}
         uses: ./.github/actions/androidlinux
 
-      - name: Install example
-        run: yarn --cwd ./example install
-        shell: bash
-
       - uses: actions/checkout@v4
       - name: Run IOS Linux build composite action
         if: ${{ runner.os == 'macOS' }}
         uses: ./.github/actions/ioslinux
+
+      - name: Install example
+        run: yarn --cwd ./example install
+        shell: bash
 
       - name: Build example
         run: yarn --cwd ./example build:web
