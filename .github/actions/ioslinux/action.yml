@@ -139,7 +139,7 @@ runs:
       run: |
         cd example/ios
         mkdir Payload
-        cp -r /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app Payload/
+        cp -r /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/ Payload/
         zip -r example.ipa Payload
       shell: bash
 
