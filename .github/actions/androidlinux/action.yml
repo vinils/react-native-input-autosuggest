@@ -1,0 +1,28 @@
+name: "Android Linux Build"
+description: "Android Linux Build"
+runs:
+  using: "composite"
+  steps:
+    - run: chmod +x example/android/gradlew
+      shell: bash
+
+    - uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+    # - uses: actions/setup-node@v3
+    #   with: {node-version: '18.x', cache: 'yarn'}
+
+    - name: Install example
+      run: yarn --cwd ./example install
+      shell: bash
+
+    - run: |
+        cd example/android
+        ./gradlew assembleRelease --no-daemon --warning-mode all
+      shell: bash
+    - uses: actions/upload-artifact@v4
+      with:
+        name: app-release-android
+        path: example/android/app/build/outputs/apk/release/*.apk
