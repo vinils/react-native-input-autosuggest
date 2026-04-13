@@ -201,7 +201,6 @@ jobs:
 
       - name: Build example
         run: yarn --cwd ./example build:web
-        continue-on-error: true
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -212,7 +211,6 @@ jobs:
         with:
           name: examplepg-${{ matrix.os }}
           path: './example/dist'
-        continue-on-error: true
 
   deploy:
     runs-on: ubuntu-latest
