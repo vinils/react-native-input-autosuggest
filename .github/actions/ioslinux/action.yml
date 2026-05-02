@@ -139,6 +139,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: app-release-ios
-        path: /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app
+        path:  /Users/runner/work/react-native-input-autosuggest/react-native-input-autosuggest/example/ios/build/Build/Products/Debug-iphonesimulator/example.app
 
 
