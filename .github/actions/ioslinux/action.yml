@@ -137,12 +137,12 @@ runs:
         cd example/ios
         xcodebuild -workspace example.xcworkspace \
           -scheme example \
-          -configuration Debug  \
+          -configuration Release \
           -sdk iphonesimulator \
-          -derivedDataPath build \
           CODE_SIGNING_ALLOWED=NO \
           CODE_SIGNING_REQUIRED=NO \
-          COMPILER_INDEX_STORE_ENABLE=NO
+          CODE_SIGN_IDENTITY="" \
+          AD_HOC_CODE_SIGNING_ALLOWED=YES
           # -sdk iphoneos \
       shell: bash
 
@@ -150,6 +150,6 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: app-release-ios.app
-        path:  /Users/runner/work/react-native-input-autosuggest/react-native-input-autosuggest/example/ios/build/Build/Products/Debug-iphonesimulator/example.app
+        path:  /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app
 
 
