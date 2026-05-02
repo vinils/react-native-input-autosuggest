@@ -55,6 +55,17 @@ runs:
       run: yarn --cwd ./example install
       shell: bash
 
+    - name: Generate JS Bundle
+      run: |
+        mkdir -p ios/bundle
+        yarn react-native bundle \
+          --entry-file index.js \
+          --platform ios \
+          --dev false \
+          --bundle-output ios/main.jsbundle \
+          --assets-dest ios
+      shell: bash
+
     - run: |
         cd example/ios
         pod install --repo-update
@@ -119,18 +130,6 @@ runs:
     # #   with:
     # #     name: ios-ipa-output
     # #     path: example/ios/build/ipa/*.ipa
-
-    - name: Generate JS Bundle
-      run: |
-        mkdir -p ios/bundle
-        npx react-native bundle \
-          --entry-file index.js \
-          --platform ios \
-          --dev false \
-          --bundle-output ios/main.jsbundle \
-          --assets-dest ios
-      shell: bash
-
 
     - name: Archive Workspace
       run: |
