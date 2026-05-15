@@ -12,7 +12,7 @@ runs:
     - name: Setup Example Workspace
       run: |
         cd example
-        yarn install
+        yarn install --frozen-lockfile
       shell: bash
 
     - name: Install Pods
