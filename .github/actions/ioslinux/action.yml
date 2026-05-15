@@ -7,7 +7,7 @@ runs:
       run: yarn install --frozen-lockfile
       shell: bash
 
-    # Enforces TypeScript compilation of the core autosuggest library components first
+    # FIX 1: Compiles root source modules so example package cross-linking doesn't break
     - name: Precompile Root Component Package
       run: yarn prepare 
       shell: bash
@@ -24,14 +24,26 @@ runs:
         pod install
       shell: bash
 
-    - name: Clean Build Cache
+    - name: Clean Project Workspaces
       run: |
         cd example/ios
         xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # THE ULTIMATE FIX: Force Xcode to dynamically trigger the bundle generation internally
-    - name: Compile Standalone Simulator Binary Archive (Release)
+    # FIX 2: Manually export the offline JS container payload into the native module asset directory
+    - name: Generate Production JavaScript Offline Bundle
+      run: |
+        cd example
+        npx react-native bundle \
+          --entry-file index.js \
+          --platform ios \
+          --dev false \
+          --bundle-output ios/main.jsbundle \
+      shell: bash
+          --assets-dest ios
+
+    # FIX 3: Enforce Release compilation while forcing Xcode to bundle untracked asset layers 
+    - name: Compile Standalone Simulator Binary Archive (Release Build)
       run: |
         xcodebuild \
           -workspace example/ios/example.xcworkspace \
@@ -43,6 +55,13 @@ runs:
           SKIP_BUNDLING=false
       shell: bash
 
+    # FIX 4: Explicitly seed the binary bundle wrapper with the compiled JS module array
+    - name: Force Embed Bundle file into App Package Structure
+      run: |
+        cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
+      shell: bash
+
+    # FIX 5: Package the Release configuration build wrapper directory explicitly
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
