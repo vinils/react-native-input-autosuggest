@@ -40,7 +40,11 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
   override func bundleURL() -> URL? {
 #if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    if let url = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index") {
+      return url
+    }
+    NSLog("Packager URL not available; falling back to embedded JS bundle (main.jsbundle)")
+    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #else
     Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
