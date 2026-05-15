@@ -4,6 +4,12 @@
   "description": "input autosuggest react native",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",
+  "react-native": {
+    "platforms": {
+      "ios": null,
+      "android": null
+    }
+  },
   "exports": {
     ".": {
       "source": "./src/index.tsx",
