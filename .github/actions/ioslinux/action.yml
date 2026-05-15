@@ -21,8 +21,8 @@ runs:
           pod install --repo-update
       shell: bash
 
-    # FIX 1: Explicitly bundle the JS inside the native app resources root folder
-    - name: Compile Target JavaScript Entry Bundle
+    # FIX 1: Generate the production offline bundle inside the example workspace
+    - name: Compile Production JavaScript Offline Bundle
       run: |
         cd example
         npx react-native bundle \
@@ -33,30 +33,36 @@ runs:
           --assets-dest ios
       shell: bash
 
-    # FIX 2: Enforce a clean build workspace to stop older 'Release' app artifacts from being cached
-    - name: Clean Previous Builds
+    # FIX 2: Clean previous builds to clear cached metadata
+    - name: Clean Previous Build Artifacts
       run: |
         cd example/ios
-        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Debug
+        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # FIX 3: Force the compilation process to target 'Debug' layout parameters explicitly
-    - name: Compile Simulator Target Binary Archive
+    # FIX 3: Compile in Release mode so it reads the offline main.jsbundle instead of looking for localhost
+    - name: Compile Simulator Target Binary Archive (Release)
       run: |
         xcodebuild \
           -workspace example/ios/example.xcworkspace \
           -scheme example \
-          -configuration Debug \
+          -configuration Release \
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
           ONLY_ACTIVE_ARCH=NO
       shell: bash
 
-    # FIX 4: Explicitly package the Debug-iphonesimulator wrapper path inside the compression routine
+    # FIX 4: Explicitly inject the main.jsbundle file directly into the finalized compiled application archive folder before compression
+    - name: Manually Inject JavaScript Bundle into App Package
+      run: |
+        cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
+      shell: bash
+
+    # FIX 5: Compress the production Release application architecture bundle
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
-        cp -R example/ios/build/Build/Products/Debug-iphonesimulator/example.app build-output/
+        cp -R example/ios/build/Build/Products/Release-iphonesimulator/example.app build-output/
         cd build-output && zip -r ios-simulator-build.zip example.app
       shell: bash
 
