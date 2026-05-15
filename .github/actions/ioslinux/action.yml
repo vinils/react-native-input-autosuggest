@@ -12,7 +12,6 @@ runs:
     - name: Setup Example Workspace
       run: |
         cd example
-        yarn prepare
         yarn install
       shell: bash
 
