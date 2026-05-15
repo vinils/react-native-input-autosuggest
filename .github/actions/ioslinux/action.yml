@@ -43,13 +43,11 @@ runs:
           SKIP_BUNDLING=false
       shell: bash
 
-    # FIX 4: Explicitly seed the binary bundle wrapper with the compiled JS module array
     - name: Force Embed Bundle file into App Package Structure
       run: |
         cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
       shell: bash
 
-    # FIX 5: Package the Release configuration build wrapper directory explicitly
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
