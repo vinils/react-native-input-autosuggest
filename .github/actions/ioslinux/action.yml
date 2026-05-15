@@ -7,7 +7,8 @@ runs:
       run: yarn install --frozen-lockfile
       shell: bash
 
-    - name: Precompile Root Component Package Modules
+    # Enforces TypeScript compilation of the core autosuggest library components first
+    - name: Precompile Root Component Package
       run: yarn prepare 
       shell: bash
 
@@ -23,47 +24,29 @@ runs:
         pod install
       shell: bash
 
-    # FIX 2: Manually pre-bundle the code so the Debug app has zero dependence on a running Metro port
-    - name: Pre-bundle Standalone JavaScript Entry Asset
-      run: |
-        cd example
-        npx react-native bundle \
-          --entry-file index.js \
-          --platform ios \
-          --dev true \
-          --bundle-output ios/main.jsbundle \
-          --assets-dest ios
-      shell: bash
-
-    - name: Clean Previous Build Cache
+    - name: Clean Build Cache
       run: |
         cd example/ios
-        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Debug
+        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # FIX 3: Inject the offline bundle argument and disable remote developer script fetching
-    - name: Compile Standalone Simulator Binary Archive
+    # THE ULTIMATE FIX: Force Xcode to dynamically trigger the bundle generation internally
+    - name: Compile Standalone Simulator Binary Archive (Release)
       run: |
         xcodebuild \
           -workspace example/ios/example.xcworkspace \
           -scheme example \
-          -configuration Debug \
+          -configuration Release \
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
           ONLY_ACTIVE_ARCH=NO \
-          GCC_PREPROCESSOR_DEFINITIONS='$inherited RCT_DEV=0'
-      shell: bash
-
-    # FIX 4: Ensure the bundle file is securely present inside the artifact folder structure
-    - name: Force Embed Bundle file into App Package Structure
-      run: |
-        cp example/ios/main.jsbundle example/ios/build/Build/Products/Debug-iphonesimulator/example.app/main.jsbundle
+          SKIP_BUNDLING=false
       shell: bash
 
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
-        cp -R example/ios/build/Build/Products/Debug-iphonesimulator/example.app build-output/
+        cp -R example/ios/build/Build/Products/Release-iphonesimulator/example.app build-output/
         cd build-output && zip -r ios-simulator-build.zip example.app
       shell: bash
 
