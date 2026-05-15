@@ -28,7 +28,7 @@ runs:
         npx react-native bundle \
           --entry-file index.js \
           --platform ios \
-          --dev true \
+          --dev false \
           --bundle-output ios/main.jsbundle \
           --assets-dest ios
       shell: bash
