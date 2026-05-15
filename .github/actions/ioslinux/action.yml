@@ -21,7 +21,8 @@ runs:
           pod install --repo-update
       shell: bash
 
-    - name: Build Production JS Bundle for iOS Simulator
+    # FIX 1: Explicitly bundle the JS inside the native app resources root folder
+    - name: Compile Target JavaScript Entry Bundle
       run: |
         cd example
         npx react-native bundle \
@@ -32,23 +33,35 @@ runs:
           --assets-dest ios
       shell: bash
 
-    - name: Archive Workspace
+    # FIX 2: Enforce a clean build workspace to stop older 'Release' app artifacts from being cached
+    - name: Clean Previous Builds
       run: |
-        xcodebuild -workspace example/ios/example.xcworkspace \
-          -scheme example \
-          -configuration Degbug \
-          -sdk iphonesimulator \
-          -derivedDataPath example/ios/build \
-          CODE_SIGNING_ALLOWED=NO \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGN_IDENTITY="" \
-          AD_HOC_CODE_SIGNING_ALLOWED=YES \
-          ONLY_ACTIVE_ARCH=NO
-          # -sdk iphoneos \
+        cd example/ios
+        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Debug
       shell: bash
 
-    - name: Upload Artifact
+    # FIX 3: Force the compilation process to target 'Debug' layout parameters explicitly
+    - name: Compile Simulator Target Binary Archive
+      run: |
+        xcodebuild \
+          -workspace example/ios/example.xcworkspace \
+          -scheme example \
+          -configuration Debug \
+          -sdk iphonesimulator \
+          -derivedDataPath example/ios/build \
+          ONLY_ACTIVE_ARCH=NO
+      shell: bash
+
+    # FIX 4: Explicitly package the Debug-iphonesimulator wrapper path inside the compression routine
+    - name: Compress App for Distribution Artifacts
+      run: |
+        mkdir -p build-output
+        cp -R example/ios/build/Build/Products/Debug-iphonesimulator/example.app build-output/
+        cd build-output && zip -r ios-simulator-build.zip example.app
+      shell: bash
+
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: app-release-ios.app
-        path:  example/ios/build/Build/Products/Debug-iphonesimulator/example.app
+        name: ios-simulator-app
+        path: build-output/ios-simulator-build.zip
