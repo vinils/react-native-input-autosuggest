@@ -18,19 +18,7 @@ runs:
         yarn install --frozen-lockfile
       shell: bash
 
-    - name: Install CocoaPods Native Dependencies
-      run: |
-        cd example/ios
-        pod install
-      shell: bash
-
-    - name: Clean Project Workspaces
-      run: |
-        cd example/ios
-        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
-      shell: bash
-
-    - name: Generate Production JavaScript Offline Bundle
+    - name: Generate Offline Production JavaScript Bundle
       run: |
         cd example
         npx react-native bundle \
@@ -41,6 +29,20 @@ runs:
           --assets-dest ios/
       shell: bash
 
+    - name: Reinstall CocoaPods Dependencies
+      run: |
+        cd example/ios
+        pod deintegrate
+        pod cache clean --all
+        pod install
+      shell: bash
+
+    - name: Clean Xcode Workspaces
+      run: |
+        cd example/ios
+        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
+      shell: bash
+
     - name: Compile Standalone Simulator Binary Archive (Release Build)
       run: |
         xcodebuild \
@@ -49,16 +51,7 @@ runs:
           -configuration Release \
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
-          ONLY_ACTIVE_ARCH=NO \
-          SKIP_BUNDLING=false \
-          UNLOCALIZED_RESOURCES_FOLDER_PATH="example.app"
-      shell: bash
-
-    - name: Force Embed Bundle variations into App Package Structure
-      run: |
-        TARGET_APP_DIR="example/ios/build/Build/Products/Release-iphonesimulator/example.app"
-        cp example/ios/main.jsbundle "$TARGET_APP_DIR/main.jsbundle"
-        cp example/ios/main.jsbundle "$TARGET_APP_DIR/index.jsbundle"
+          ONLY_ACTIVE_ARCH=NO
       shell: bash
 
     - name: Compress App for Distribution Artifacts
