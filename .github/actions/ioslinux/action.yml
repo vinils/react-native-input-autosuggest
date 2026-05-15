@@ -57,8 +57,7 @@ runs:
 
     - name: Generate JS Bundle
       run: |
-        cd example/ios
-        mkdir -p ios/bundle
+        cd example
         yarn react-native bundle \
           --entry-file index.js \
           --platform ios \
