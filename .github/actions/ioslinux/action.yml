@@ -30,6 +30,17 @@ runs:
         xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
+    - name: Generate Production JavaScript Offline Bundle
+      run: |
+        cd example
+        npx react-native bundle \
+          --entry-file index.js \
+          --platform ios \
+          --dev false \
+          --bundle-output ios/main.jsbundle \
+          --assets-dest ios/
+      shell: bash
+
     - name: Compile Standalone Simulator Binary Archive (Release Build)
       run: |
         xcodebuild \
@@ -39,8 +50,15 @@ runs:
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
           ONLY_ACTIVE_ARCH=NO \
-          FORCE_BUNDLING=true \
-          SKIP_BUNDLING=false
+          SKIP_BUNDLING=false \
+          UNLOCALIZED_RESOURCES_FOLDER_PATH="example.app"
+      shell: bash
+
+    - name: Force Embed Bundle variations into App Package Structure
+      run: |
+        TARGET_APP_DIR="example/ios/build/Build/Products/Release-iphonesimulator/example.app"
+        cp example/ios/main.jsbundle "$TARGET_APP_DIR/main.jsbundle"
+        cp example/ios/main.jsbundle "$TARGET_APP_DIR/index.jsbundle"
       shell: bash
 
     - name: Compress App for Distribution Artifacts
