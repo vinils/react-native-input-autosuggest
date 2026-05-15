@@ -43,11 +43,6 @@ runs:
           SKIP_BUNDLING=false
       shell: bash
 
-    - name: Force Embed Bundle file into App Package Structure
-      run: |
-        cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
-      shell: bash
-
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
