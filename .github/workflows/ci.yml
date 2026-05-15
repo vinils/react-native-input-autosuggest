@@ -78,6 +78,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Build package
+        run: yarn prepare
+
       # - name: Lint files
       #   run: yarn lint
 
@@ -89,9 +92,6 @@ jobs:
 
       - name: Coverage
         run: yarn test --maxWorkers=2 --coverage
-
-      - name: Build package
-        run: yarn prepare
 
       - name: Create package
         run: yarn pack

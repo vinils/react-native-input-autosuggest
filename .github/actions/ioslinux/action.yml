@@ -7,7 +7,6 @@ runs:
       run: yarn install --frozen-lockfile
       shell: bash
 
-    # FIX 1: Compiles root source modules so example package cross-linking doesn't break
     - name: Precompile Root Component Package
       run: yarn prepare 
       shell: bash
