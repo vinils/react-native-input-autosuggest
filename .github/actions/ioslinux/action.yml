@@ -36,7 +36,7 @@ runs:
       run: |
         xcodebuild -workspace example/ios/example.xcworkspace \
           -scheme example \
-          -configuration Release \
+          -configuration Degbug \
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
           CODE_SIGNING_ALLOWED=NO \
@@ -51,4 +51,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: app-release-ios.app
-        path:  example/ios/build/Build/Products/Release-iphonesimulator/example.app
+        path:  example/ios/build/Build/Products/Debug-iphonesimulator/example.app
