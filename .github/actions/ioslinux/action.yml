@@ -21,7 +21,7 @@ runs:
           pod install
       shell: bash
 
-    # FIX 2: Manually pre-bundle the code so the Debug app has zero dependence on a running Metro port
+    # FIX 1: Generate a true production release offline asset bundle mapping
     - name: Pre-bundle Standalone JavaScript Entry Asset
       run: |
         cd example
@@ -36,32 +36,32 @@ runs:
     - name: Clean Previous Build Cache
       run: |
         cd example/ios
-        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Debug
+        xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # FIX 3: Inject the offline bundle argument and disable remote developer script fetching
+    # FIX 2: Switch configuration to Release so it stops listening for a local Metro server port
     - name: Compile Standalone Simulator Binary Archive
       run: |
         xcodebuild \
           -workspace example/ios/example.xcworkspace \
           -scheme example \
-          -configuration Debug \
+          -configuration Release \
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
-          ONLY_ACTIVE_ARCH=NO \
-          GCC_PREPROCESSOR_DEFINITIONS='$inherited RCT_DEV=0'
+          ONLY_ACTIVE_ARCH=NO
       shell: bash
 
-    # FIX 4: Ensure the bundle file is securely present inside the artifact folder structure
+    # FIX 3: Force copy the offline bundle inside the production folder wrapper path
     - name: Force Embed Bundle file into App Package Structure
       run: |
-        cp example/ios/main.jsbundle example/ios/build/Build/Products/Debug-iphonesimulator/example.app/main.jsbundle
+        cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
       shell: bash
 
+    # FIX 4: Compress the finalized production Release folder container bundle output
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
-        cp -R example/ios/build/Build/Products/Debug-iphonesimulator/example.app build-output/
+        cp -R example/ios/build/Build/Products/Release-iphonesimulator/example.app build-output/
         cd build-output && zip -r ios-simulator-build.zip example.app
       shell: bash
 
