@@ -15,6 +15,12 @@ runs:
         yarn install
       shell: bash
 
+    - name: Install Pods
+      run: |
+          cd example/ios
+          pod install --repo-update
+      shell: bash
+
     - name: Build Production JS Bundle for iOS Simulator
       run: |
         cd example
@@ -26,27 +32,14 @@ runs:
           --assets-dest ios
       shell: bash
 
-    - name: Force Inject Bundle into Compiled App Archive
-      # This makes sure the bundle is copied into the binary container even if untracked by Xcode project files
-      run: |
-        mkdir -p example/ios/build/Build/Products/Release-iphonesimulator/example.app
-        cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
-      shell: bash
-
-    - name: Install Pods
-      run: |
-          cd example/ios
-          pod install --repo-update
-      shell: bash
-
     - name: Archive Workspace
       run: |
         cd example/ios
-        xcodebuild -workspace example.xcworkspace \
+        xcodebuild -workspace example/ios/example.xcworkspace \
           -scheme example \
           -configuration Debug \
           -sdk iphonesimulator \
-          -derivedDataPath build \
+          -derivedDataPath example/ios/build \
           CODE_SIGNING_ALLOWED=NO \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGN_IDENTITY="" \
@@ -57,12 +50,5 @@ runs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: app-release-ios.appA
-        path:  /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app
-
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
         name: app-release-ios.app
-        path:  example/ios/build/Build/Products/Release-iphonesimulator/example.app
+        path:  example/ios/build/Build/Products/Debug-iphonesimulator/example.app
