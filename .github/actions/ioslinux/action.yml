@@ -30,19 +30,6 @@ runs:
         xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # FIX 2: Manually export the offline JS container payload into the native module asset directory
-    - name: Generate Production JavaScript Offline Bundle
-      run: |
-        cd example
-        npx react-native bundle \
-          --entry-file index.js \
-          --platform ios \
-          --dev false \
-          --bundle-output ios/main.jsbundle \
-          --assets-dest ios
-      shell: bash
-
-    # FIX 3: Enforce Release compilation while forcing Xcode to bundle untracked asset layers 
     - name: Compile Standalone Simulator Binary Archive (Release Build)
       run: |
         xcodebuild \
@@ -52,6 +39,7 @@ runs:
           -sdk iphonesimulator \
           -derivedDataPath example/ios/build \
           ONLY_ACTIVE_ARCH=NO \
+          FORCE_BUNDLING=true \
           SKIP_BUNDLING=false
       shell: bash
 
