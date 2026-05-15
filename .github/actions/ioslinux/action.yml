@@ -34,7 +34,6 @@ runs:
 
     - name: Archive Workspace
       run: |
-        cd example/ios
         xcodebuild -workspace example/ios/example.xcworkspace \
           -scheme example \
           -configuration Release \
