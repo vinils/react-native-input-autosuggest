@@ -15,6 +15,11 @@ runs:
         yarn install --frozen-lockfile
       shell: bash
 
+    - name: Force Disable New Architecture Compilation
+      run: |
+        echo '{"newArchEnabled": "false"}' > example/ios/Podfile.properties.json
+      shell: bash
+
     - name: Install Pods
       run: |
           cd example/ios
@@ -39,7 +44,6 @@ runs:
         xcodebuild clean -workspace example.xcworkspace -scheme example -configuration Release
       shell: bash
 
-    # FIX 2: Switch configuration to Release so it stops listening for a local Metro server port
     - name: Compile Standalone Simulator Binary Archive
       run: |
         xcodebuild \
@@ -51,13 +55,11 @@ runs:
           ONLY_ACTIVE_ARCH=NO
       shell: bash
 
-    # FIX 3: Force copy the offline bundle inside the production folder wrapper path
     - name: Force Embed Bundle file into App Package Structure
       run: |
         cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
       shell: bash
 
-    # FIX 4: Compress the finalized production Release folder container bundle output
     - name: Compress App for Distribution Artifacts
       run: |
         mkdir -p build-output
