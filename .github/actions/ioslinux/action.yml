@@ -18,7 +18,7 @@ runs:
     - name: Install Pods
       run: |
           cd example/ios
-          pod install
+          pod install --repo-update
       shell: bash
 
     # FIX 1: Generate a true production release offline asset bundle mapping
