@@ -27,6 +27,13 @@ runs:
         cp example/ios/main.jsbundle example/ios/build/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
       shell: bash
 
+    - name: Force Inject Bundle into Compiled App Archive2
+      # This makes sure the bundle is copied into the binary container even if untracked by Xcode project files
+      run: |
+        mkdir -p example/ios/build/Build/Products/Release-iphonesimulator/example.app
+        cp example/ios/main.jsbundle /Users/runner/Library/Developer/Xcode/DerivedData/example-eucopdxwvitevtccgdjftrtxicnv/Build/Products/Release-iphonesimulator/example.app/main.jsbundle
+      shell: bash
+
     - name: Install Pods
       run: |
           cd example/ios
