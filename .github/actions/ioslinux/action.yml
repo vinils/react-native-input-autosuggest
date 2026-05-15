@@ -39,8 +39,8 @@ runs:
           --platform ios \
           --dev false \
           --bundle-output ios/main.jsbundle \
-      shell: bash
           --assets-dest ios
+      shell: bash
 
     # FIX 3: Enforce Release compilation while forcing Xcode to bundle untracked asset layers 
     - name: Compile Standalone Simulator Binary Archive (Release Build)
