@@ -44,7 +44,7 @@ runs:
         cd example/ios
         xcodebuild -workspace example.xcworkspace \
           -scheme example \
-          -configuration Release \
+          -configuration Debug \
           -sdk iphonesimulator \
           -derivedDataPath build \
           CODE_SIGNING_ALLOWED=NO \
