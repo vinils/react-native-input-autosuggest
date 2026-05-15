@@ -5,7 +5,7 @@ runs:
   steps:
     - name: Setup Project Workspace
       run: |
-        yarn install
+        yarn install --frozen-lockfile
         yarn prepare
       shell: bash
 
@@ -18,7 +18,7 @@ runs:
     - name: Install Pods
       run: |
           cd example/ios
-          pod install --repo-update
+          pod install
       shell: bash
 
     # FIX 2: Manually pre-bundle the code so the Debug app has zero dependence on a running Metro port
