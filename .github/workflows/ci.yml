@@ -73,7 +73,6 @@ jobs:
       - name: Enable Corepack
         run: | 
           corepack enable
-          yarn set version 4.11.0
 
       - name: Install dependencies
         run: yarn install --immutable
