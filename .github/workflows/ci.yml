@@ -115,12 +115,14 @@ jobs:
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          if-no-files-found: warn
         continue-on-error: true
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          if-no-files-found: warn
         continue-on-error: true
 
   publish:
